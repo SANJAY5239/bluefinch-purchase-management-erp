@@ -1,0 +1,30 @@
+[
+    {
+        "id": "USR-0001",
+        "name": "Sanjay R",
+        "email": "sanjaykmm04@gmail.com",
+        "password": "$2y$10$JbuT0hGDjTK\/9yBIrLTczet.rhpMinR919RFqS.7abFyBzkE\/J8vW",
+        "created_at": "2026-08-23 20:03:09"
+    },
+    {
+        "id": "USR-0002",
+        "name": "sanjayr",
+        "email": "sanu@gmail.com",
+        "password": "$2y$10$t.3.igGU2JqZooXBgFP0XexI9tGgOc5tcv3wiMR\/2mUnEyahUwOOy",
+        "created_at": "2026-08-23 20:34:06"
+    },
+    {
+        "id": "USR-0003",
+        "name": "sanjayr",
+        "email": "sant@gmail.com",
+        "password": "$2y$10$\/RVfTh3AJGrR7kQ6WKnQIekB2uvTCY8cjn4qeMso9noIfg9Qi5S5C",
+        "created_at": "2026-08-23 20:37:23"
+    },
+    {
+        "id": "USR-0004",
+        "name": "meenu",
+        "email": "meenu@gmail.com",
+        "password": "$2y$10$qZLmJRGL1tx.t6z8l7rL2O.EgueAs4ixKBMhTlbKgg9rpr2IHpCBK",
+        "created_at": "2026-08-23 21:24:19"
+    }
+]

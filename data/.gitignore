@@ -1,0 +1,19 @@
+# XAMPP / PHP temporary files
+*.log
+
+# VS Code
+.vscode/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+
+# PHP sessions
+sess_*
+
+# OS files
+.DS_Store

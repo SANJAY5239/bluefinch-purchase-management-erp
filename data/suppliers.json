@@ -1,0 +1,41 @@
+[
+    {
+        "code": "CUS-001",
+        "name": "ABC Solutions Pvt Ltd",
+        "contact_person": "Sanjay ",
+        "phone": "7356219875",
+        "email": "sanjaykmm04@gmail.com",
+        "tax_number": "10",
+        "payment_terms": "30 Days",
+        "status": "Active",
+        "address": "kochi",
+        "id": "SUP-0001",
+        "created_at": "2026-08-23 20:14:30"
+    },
+    {
+        "code": "SUP-0002",
+        "name": "TechNova Solutions Pvt Ltd",
+        "contact_person": "binu",
+        "phone": "45454455445",
+        "email": "binu@gmail.com",
+        "tax_number": "Tax \/ VAT Number: 32ABCDE1234F1Z5",
+        "payment_terms": "30 Days",
+        "status": "Active",
+        "address": "happy hours",
+        "id": "SUP-0002",
+        "created_at": "2026-08-23 21:14:35"
+    },
+    {
+        "code": "SUP-0003",
+        "name": "Prime Office Supplies Pvt Ltd",
+        "contact_person": "meenu",
+        "phone": "789456123",
+        "email": "meeenu@gmail.com",
+        "tax_number": "10",
+        "payment_terms": "Cash",
+        "status": "Active",
+        "address": "ooowwww",
+        "id": "SUP-0003",
+        "created_at": "2026-08-23 21:17:08"
+    }
+]

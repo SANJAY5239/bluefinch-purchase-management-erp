@@ -1,0 +1,38 @@
+[
+    {
+        "code": "CUS-001",
+        "name": "ABC Solutions",
+        "category": "phone",
+        "unit": "Nos",
+        "purchase_price": "100",
+        "tax": "20",
+        "status": "Active",
+        "description": "haeeelooooo",
+        "id": "ITM-0001",
+        "created_at": "2026-08-23 20:03:57"
+    },
+    {
+        "code": "ITM-0002",
+        "name": "Dell Laptop",
+        "category": "laptop",
+        "unit": "Nos",
+        "purchase_price": "50000",
+        "tax": "5",
+        "status": "Active",
+        "description": "its your laptop",
+        "id": "ITM-0002",
+        "created_at": "2026-08-23 21:19:48"
+    },
+    {
+        "code": "ITM-0003",
+        "name": "Wireless Mouse",
+        "category": "mouse",
+        "unit": "2",
+        "purchase_price": "2000",
+        "tax": "2",
+        "status": "Active",
+        "description": "Wireless Mouse ",
+        "id": "ITM-0003",
+        "created_at": "2026-08-24 13:26:20"
+    }
+]
