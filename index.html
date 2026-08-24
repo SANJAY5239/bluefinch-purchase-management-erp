@@ -1,4 +1,91 @@
-<div class="auth-actions">
-    <a href="./login.html" class="btn btn-primary">Login</a>
-    <a href="./register.html" class="btn btn-secondary">Create Account</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluefinch ERP - Login</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="auth-page">
+
+<div class="auth-card form-card">
+
+    <div class="brand">
+        BLUEFINCH <span>ERP</span>
+    </div>
+
+    <h1>Welcome Back</h1>
+
+    <p class="muted">
+        Sign in to your purchase management dashboard.
+    </p>
+
+    <div id="message"></div>
+
+    <form id="loginForm">
+
+        <label>
+            Email
+            <input type="email" id="email" required>
+        </label>
+
+        <label>
+            Password
+            <input type="password" id="password" required>
+        </label>
+
+        <button type="submit" class="btn btn-primary full">
+            Login
+        </button>
+
+    </form>
+
+    <p class="auth-link">
+        Demo Login:
+        <strong>admin@bluefinch.com</strong>
+    </p>
+
 </div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const message = document.getElementById("message");
+
+    const demoEmail = "admin@bluefinch.com";
+    const demoPassword = "Bluefinch@123";
+
+    if (email === demoEmail && password === demoPassword) {
+
+        message.innerHTML = `
+            <p style="color: green;">
+                Login successful! Opening dashboard...
+            </p>
+        `;
+
+        sessionStorage.setItem("bluefinchLoggedIn", "true");
+
+        setTimeout(function() {
+            window.location.href = "dashboard.html";
+        }, 500);
+
+    } else {
+
+        message.innerHTML = `
+            <p style="color: red;">
+                Invalid email or password.
+            </p>
+        `;
+
+    }
+
+});
+</script>
+
+</body>
+</html>
