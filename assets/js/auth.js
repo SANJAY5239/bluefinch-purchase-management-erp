@@ -1,111 +1,39 @@
-const registerForm = document.getElementById("registerForm");
-const loginForm = document.getElementById("loginForm");
-const message = document.getElementById("message");
+const DEMO_EMAIL = "admin@bluefinch.com";
+const DEMO_PASSWORD = "Bluefinch@123";
 
-function showMessage(text, success = false) {
+document.addEventListener("DOMContentLoaded", function () {
 
-    message.innerHTML = `
-        <div class="alert ${success ? "success" : "error"}">
-            ${text}
-        </div>
-    `;
-}
+    const loginForm = document.getElementById("loginForm");
 
+    if (!loginForm) return;
 
-// REGISTER
-if (registerForm) {
-
-    registerForm.addEventListener("submit", async function (e) {
-
+    loginForm.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const data = Object.fromEntries(
-            new FormData(registerForm).entries()
-        );
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const message = document.getElementById("message");
 
-        if (data.password !== data.confirm_password) {
-            showMessage("Passwords do not match.");
-            return;
-        }
+        if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
 
-        try {
+            message.innerHTML = `
+                <div class="success-message">
+                    Login successful! Redirecting...
+                </div>
+            `;
 
-            const response = await fetch(
-                "api/register.php?action=register",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                }
-            );
-
-            const result = await response.json();
-
-            showMessage(result.message, result.success);
-
-            if (result.success) {
-
-                setTimeout(() => {
-                    window.location.href = "login.html";
-                }, 1000);
-
-            }
-
-        } catch (error) {
-
-            showMessage(
-                "Cannot connect to PHP backend. Start Apache in XAMPP."
-            );
-
-        }
-
-    });
-
-}
-
-
-// LOGIN
-if (loginForm) {
-
-    loginForm.addEventListener("submit", async function (e) {
-
-        e.preventDefault();
-
-        const data = Object.fromEntries(
-            new FormData(loginForm).entries()
-        );
-
-        try {
-
-            const response = await fetch(
-                "api/login.php",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(data)
-                }
-            );
-
-            const result = await response.json();
-
-            showMessage(result.message, result.success);
-
-            if (result.success) {
+            setTimeout(function () {
                 window.location.href = "dashboard.html";
-            }
+            }, 500);
 
-        } catch (error) {
+        } else {
 
-            showMessage(
-                "Cannot connect to PHP backend. Start Apache in XAMPP."
-            );
-
+            message.innerHTML = `
+                <div class="error-message">
+                    Invalid email or password.
+                </div>
+            `;
         }
-
     });
 
-}
+});
