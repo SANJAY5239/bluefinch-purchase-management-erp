@@ -1,0 +1,47 @@
+[
+    {
+        "id": 1,
+        "mapping_code": "MAP0001",
+        "item_id": 1,
+        "item_code": "ITM0001",
+        "item_name": "Dell OptiPlex Desktop 7090",
+        "supplier_id": 2,
+        "supplier_code": "SUP0002",
+        "supplier_name": "Tech Source India",
+        "supplier_item_code": "DELL-OPT-7090-IN",
+        "purchase_price": 435,
+        "preferred": true,
+        "status": "Active",
+        "created_at": "2026-08-25 12:00:00"
+    },
+    {
+        "id": 2,
+        "mapping_code": "MAP0002",
+        "item_id": 1,
+        "item_code": "ITM0001",
+        "item_name": "Dell OptiPlex Desktop 7090",
+        "supplier_id": 1,
+        "supplier_code": "SUP0001",
+        "supplier_name": "ABC Office Supplies",
+        "supplier_item_code": "OPT-7090-ABC",
+        "purchase_price": 450,
+        "preferred": false,
+        "status": "Active",
+        "created_at": "2026-08-25 12:10:00"
+    },
+    {
+        "id": 3,
+        "mapping_code": "MAP0003",
+        "item_id": 2,
+        "item_code": "ITM0002",
+        "item_name": "HP LaserJet Pro MFP 4103fdw",
+        "supplier_id": 2,
+        "supplier_code": "SUP0002",
+        "supplier_name": "Tech Source India",
+        "supplier_item_code": "HP-MFP-4103",
+        "purchase_price": 275,
+        "preferred": true,
+        "status": "Active",
+        "created_at": "2026-08-25 12:20:00"
+    }
+]

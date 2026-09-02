@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "code": "ITM0001",
+        "name": "Dell OptiPlex Desktop 7090",
+        "description": "Intel Core i7 11th Gen, 16GB DDR4 RAM, 512GB NVMe SSD, Windows 11 Pro",
+        "category": "Electronics",
+        "unit": "PCS",
+        "purchase_price": 450,
+        "tax": 5,
+        "status": "Active",
+        "created_at": "2026-08-20 10:00:00"
+    },
+    {
+        "id": 2,
+        "code": "ITM0002",
+        "name": "HP LaserJet Pro MFP 4103fdw",
+        "description": "Multifunction wireless monochrome laser printer with duplex scanning",
+        "category": "Office Equipment",
+        "unit": "PCS",
+        "purchase_price": 280,
+        "tax": 5,
+        "status": "Active",
+        "created_at": "2026-08-20 11:30:00"
+    },
+    {
+        "id": 3,
+        "code": "ITM0003",
+        "name": "Ergonomic High-Back Executive Chair",
+        "description": "Breathable mesh back with 3D adjustable armrests and lumbar support",
+        "category": "Furniture",
+        "unit": "PCS",
+        "purchase_price": 120,
+        "tax": 5,
+        "status": "Active",
+        "created_at": "2026-08-21 09:15:00"
+    },
+    {
+        "id": 4,
+        "code": "ITM0004",
+        "name": "A4 Copy Paper 80GSM (Box of 5 Reams)",
+        "description": "High brightness multipurpose white office copy paper",
+        "category": "Stationery",
+        "unit": "BOX",
+        "purchase_price": 18.5,
+        "tax": 5,
+        "status": "Active",
+        "created_at": "2026-08-22 14:00:00"
+    },
+    {
+        "code": "IT01",
+        "name": "STEEL ROOTS",
+        "description": "FHGFGYYYT",
+        "unit": "Pcs",
+        "purchase_price": 10000,
+        "tax": 2,
+        "status": "Active",
+        "category": "General",
+        "id": 5,
+        "created_at": "2026-09-02 06:55:54"
+    },
+    {
+        "code": "hch",
+        "name": "hvghv",
+        "description": "",
+        "unit": "Pcs",
+        "purchase_price": 0,
+        "tax": 0,
+        "status": "Active",
+        "category": "General",
+        "id": 6,
+        "created_at": "2026-09-02 11:42:55"
+    }
+]

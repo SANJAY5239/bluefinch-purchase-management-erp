@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "code": "UOM0001",
+        "name": "Piece",
+        "short_name": "PCS",
+        "description": "Standard individual unit count",
+        "status": "Active",
+        "created_at": "2026-08-20 09:00:00"
+    },
+    {
+        "id": 2,
+        "code": "UOM0002",
+        "name": "Box",
+        "short_name": "BOX",
+        "description": "Standard packaged retail box container",
+        "status": "Active",
+        "created_at": "2026-08-20 09:15:00"
+    },
+    {
+        "id": 3,
+        "code": "UOM0003",
+        "name": "Carton",
+        "short_name": "CTN",
+        "description": "Master shipping carton containing multiple packs",
+        "status": "Active",
+        "created_at": "2026-08-20 09:30:00"
+    },
+    {
+        "id": 4,
+        "code": "UOM0004",
+        "name": "Kilogram",
+        "short_name": "KG",
+        "description": "Metric mass measurement (1,000 grams)",
+        "status": "Active",
+        "created_at": "2026-08-20 09:45:00"
+    },
+    {
+        "id": 5,
+        "code": "UOM0005",
+        "name": "Gram",
+        "short_name": "G",
+        "description": "Precision weight measurement in grams",
+        "status": "Active",
+        "created_at": "2026-08-20 10:00:00"
+    },
+    {
+        "id": 6,
+        "code": "UOM0006",
+        "name": "Liter",
+        "short_name": "LTR",
+        "description": "Liquid volumetric measurement in liters",
+        "status": "Active",
+        "created_at": "2026-08-20 10:15:00"
+    },
+    {
+        "id": 7,
+        "code": "UOM0007",
+        "name": "Meter",
+        "short_name": "MTR",
+        "description": "Metric linear length measurement",
+        "status": "Active",
+        "created_at": "2026-08-20 10:30:00"
+    },
+    {
+        "id": 8,
+        "code": "UOM0008",
+        "name": "Set",
+        "short_name": "SET",
+        "description": "Composite bundle or matching collection",
+        "status": "Active",
+        "created_at": "2026-08-20 10:45:00"
+    }
+]

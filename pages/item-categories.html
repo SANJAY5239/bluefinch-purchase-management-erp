@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Categories | Bluefinch ERP</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <style>
+        .category-page {
+            padding: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .page-title p {
+            margin: 6px 0 0;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .add-btn {
+            flex-shrink: 0;
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+        }
+
+        .filter-card {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+            max-width: 480px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 42px;
+            padding: 0 15px 0 40px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            font-size: 13px;
+            color: #0f172a;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        .search-box input:focus {
+            background: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .filter-select {
+            height: 42px;
+            padding: 0 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #334155;
+            background: #ffffff;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .filter-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .table-card {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .table-header {
+            width: 100%;
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .table-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .erp-table {
+            width: 100%;
+            min-width: 800px;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+        .erp-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .erp-table td {
+            padding: 15px 18px;
+            color: #334155;
+            font-size: 13px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .erp-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .erp-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: modalFadeIn 0.2s ease forwards;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-content {
+            width: 580px;
+            max-width: 100%;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px 26px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .modal-header p {
+            margin: 4px 0 0;
+            font-size: 12.5px;
+            color: #64748b;
+        }
+
+        .close-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: #f1f5f9;
+            border-radius: 8px;
+            color: #64748b;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .modal-body {
+            padding: 24px 26px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 18px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            margin-bottom: 7px;
+            color: #334155;
+            font-size: 12.5px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            height: 42px;
+            padding: 0 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #0f172a;
+            background: #ffffff;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            height: 80px;
+            padding: 10px 14px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 26px;
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 0 0 14px 14px;
+        }
+
+        .cancel-btn {
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #475569;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .cancel-btn:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .save-btn {
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">B</div>
+            <div>
+                <strong>Bluefinch</strong>
+                <small>Purchase Management</small>
+            </div>
+        </div>
+
+        <div class="nav-title">
+            Main Menu
+        </div>
+
+        <a href="dashboard.html" class="nav-link">
+            <span class="nav-icon">⌂</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="purchase-orders.html" class="nav-link">
+            <span class="nav-icon">▤</span>
+            <span>Purchase Orders</span>
+        </a>
+
+        <div class="nav-title">
+            Masters
+        </div>
+
+        <!-- SUPPLIER MASTER DROPDOWN -->
+        <div class="nav-dropdown" id="supplierDropdown">
+            <button type="button" class="nav-dropdown-btn" id="supplierDropdownBtn" aria-expanded="false">
+                <span class="nav-icon">🏢</span>
+                <span class="nav-text">Supplier Master</span>
+                <span class="dropdown-arrow">▾</span>
+            </button>
+            <div class="nav-submenu">
+                <a href="suppliers.html" class="nav-sub-item">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">📋</span>
+                    <span>Suppliers</span>
+                </a>
+                <a href="suppliers.html?action=add" class="nav-sub-item">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">➕</span>
+                    <span>Add Supplier</span>
+                </a>
+                <a href="suppliers.html?action=group" class="nav-sub-item">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">👥</span>
+                    <span>Group Supplier</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ITEMS DROPDOWN -->
+        <div class="nav-dropdown open active" id="itemsDropdown">
+            <button type="button" class="nav-dropdown-btn" id="itemsDropdownBtn" aria-expanded="true">
+                <span class="nav-icon">📦</span>
+                <span class="nav-text">Items</span>
+                <span class="dropdown-arrow">▾</span>
+            </button>
+            <div class="nav-submenu">
+                <a href="items.html" class="nav-sub-item" id="navSubItemMaster">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">◈</span>
+                    <span>Item Master</span>
+                </a>
+                <a href="item-categories.html" class="nav-sub-item active" id="navSubItemCategories">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">🏷️</span>
+                    <span>Item Categories</span>
+                </a>
+                <a href="units-of-measurement.html" class="nav-sub-item" id="navSubUnits">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">📏</span>
+                    <span>Units of Measurement</span>
+                </a>
+                <a href="item-supplier-mapping.html" class="nav-sub-item" id="navSubItemSupplierMapping">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">🔗</span>
+                    <span>Item-Supplier Mapping</span>
+                </a>
+                <a href="purchase-price-list.html" class="nav-sub-item" id="navSubPurchasePriceList">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">💲</span>
+                    <span>Purchase Price List</span>
+                </a>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <h2>Purchase Management</h2>
+            <div class="user-area">
+                <span>Administrator</span>
+                <div class="avatar">A</div>
+                <button id="logoutBtn" class="btn btn-secondary btn-small">
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <section class="content category-page">
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+
+                <div class="page-title">
+                    <h1>Item Categories</h1>
+                    <p>
+                        Categorize and organize items for classification, reporting, and purchasing policies
+                    </p>
+                </div>
+
+                <div class="header-actions">
+                    <button
+                        type="button"
+                        class="add-btn"
+                        onclick="openCategoryModal()"
+                    >
+                        <span>＋</span> Add Category
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- FILTER & SEARCH CARD -->
+            <div class="filter-card">
+
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search category code, name, description..."
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="filter-controls">
+                    <select id="statusFilter" class="filter-select" onchange="filterCategories()">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+            </div>
+
+
+            <!-- TABLE CARD -->
+            <div class="table-card">
+
+                <div class="table-header">
+                    <h2>Categories Directory</h2>
+                    <p id="categoryCount">Loading categories...</p>
+                </div>
+
+                <div class="table-container">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Category Code</th>
+                                <th>Category Name</th>
+                                <th>Description</th>
+                                <th>Items Assigned</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="categoryTableBody">
+                            <tr>
+                                <td colspan="6" class="loading">Loading categories...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ADD / EDIT CATEGORY MODAL -->
+<div class="modal" id="categoryModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <div>
+                <h2 id="modalTitle">Add Item Category</h2>
+                <p id="modalSubtitle">Define category code, name, and classification details</p>
+            </div>
+            <button type="button" class="close-btn" onclick="closeCategoryModal()">×</button>
+        </div>
+
+        <form id="categoryForm" class="modal-body" onsubmit="event.preventDefault(); saveCategory();">
+            <input type="hidden" id="categoryId">
+
+            <!-- CODE -->
+            <div class="form-group">
+                <label>Category Code</label>
+                <input
+                    type="text"
+                    id="categoryCode"
+                    placeholder="Auto-generated (e.g. CAT0001)"
+                    disabled
+                >
+            </div>
+
+            <!-- NAME -->
+            <div class="form-group">
+                <label>Category Name *</label>
+                <input
+                    type="text"
+                    id="categoryName"
+                    placeholder="e.g. Electronics, Office Equipment, Furniture"
+                    required
+                >
+            </div>
+
+            <!-- STATUS -->
+            <div class="form-group">
+                <label>Status *</label>
+                <select id="categoryStatus" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="form-group">
+                <label>Description</label>
+                <textarea
+                    id="categoryDescription"
+                    placeholder="Enter purpose, classification scope, or notes..."
+                ></textarea>
+            </div>
+
+            <div class="modal-footer" style="margin: 24px -26px -26px -26px;">
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeCategoryModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                    id="saveCategoryBtn"
+                >
+                    Save Category
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST NOTIFICATION -->
+<div id="toast" class="toast" style="display:none;"></div>
+
+
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/app.js"></script>
+
+<script>
+    /* =====================================================
+       API ENDPOINTS & STATE
+    ===================================================== */
+    let categories = [];
+    let editingCategoryId = null;
+
+    /* =====================================================
+       INITIALIZATION
+    ===================================================== */
+    document.addEventListener("DOMContentLoaded", async function () {
+        await loadCategories();
+        document.getElementById("searchInput").addEventListener("input", filterCategories);
+    });
+
+    /* =====================================================
+       LOAD CATEGORIES
+    ===================================================== */
+    async function loadCategories() {
+        const tbody = document.getElementById("categoryTableBody");
+        const count = document.getElementById("categoryCount");
+
+        tbody.innerHTML = `<tr><td colspan="6" class="loading">Loading categories...</td></tr>`;
+
+        try {
+            const res = await apiRequest("item_categories.php");
+            categories = res.data || [];
+            filterCategories();
+        } catch (err) {
+            console.error("Error loading categories:", err);
+            count.textContent = "Unable to load categories";
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty">
+                        ❌ Unable to load categories: ${escapeHTML(err.message)}
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    /* =====================================================
+       FILTER & RENDER
+    ===================================================== */
+    function filterCategories() {
+        const search = document.getElementById("searchInput").value.trim().toLowerCase();
+        const status = document.getElementById("statusFilter").value;
+
+        const filtered = categories.filter(c => {
+            const matchSearch = !search || (
+                String(c.code || "").toLowerCase().includes(search) ||
+                String(c.name || "").toLowerCase().includes(search) ||
+                String(c.description || "").toLowerCase().includes(search)
+            );
+            const matchStatus = !status || (String(c.status || "").toLowerCase() === status.toLowerCase());
+
+            return matchSearch && matchStatus;
+        });
+
+        const tbody = document.getElementById("categoryTableBody");
+        const count = document.getElementById("categoryCount");
+
+        count.textContent = `${filtered.length} categor${filtered.length === 1 ? 'y' : 'ies'} found`;
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty">
+                        No categories found matching your criteria.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(c => {
+            const status = c.status || "Active";
+            const isAct = status.toLowerCase() === "active";
+            const statusClass = isAct ? "badge-completed" : "badge-cancelled";
+            const itemCount = c.item_count || 0;
+
+            return `
+                <tr>
+                    <td>
+                        <span class="code-badge">
+                            ${escapeHTML(c.code || "-")}
+                        </span>
+                    </td>
+                    <td>
+                        <strong style="color: #0f172a; font-size: 13.5px;">
+                            🏷️ ${escapeHTML(c.name || "-")}
+                        </strong>
+                    </td>
+                    <td>
+                        <span style="color: #64748b; font-size: 12.5px;">
+                            ${escapeHTML(c.description || "-")}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="count-badge">
+                            ${itemCount} Item${itemCount === 1 ? '' : 's'}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge ${statusClass}">
+                            ${escapeHTML(status)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button
+                                type="button"
+                                class="edit-btn"
+                                title="Edit Category"
+                                onclick="editCategory(${c.id})"
+                            >
+                                ✏️
+                            </button>
+                            <button
+                                type="button"
+                                class="delete-btn"
+                                title="Delete Category"
+                                onclick="deleteCategory(${c.id})"
+                            >
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join("");
+    }
+
+    /* =====================================================
+       ADD / EDIT MODAL
+    ===================================================== */
+    function openCategoryModal() {
+        editingCategoryId = null;
+        document.getElementById("categoryForm").reset();
+        document.getElementById("categoryId").value = "";
+        document.getElementById("modalTitle").textContent = "Add Item Category";
+        document.getElementById("modalSubtitle").textContent = "Define category code, name, and classification details";
+        document.getElementById("categoryCode").value = "";
+        document.getElementById("categoryStatus").value = "Active";
+
+        document.getElementById("categoryModal").classList.add("show");
+        setTimeout(() => {
+            document.getElementById("categoryName").focus();
+        }, 100);
+    }
+
+    function editCategory(id) {
+        const cat = categories.find(c => String(c.id) === String(id));
+        if (!cat) {
+            showToast("Category not found", true);
+            return;
+        }
+
+        editingCategoryId = cat.id;
+        document.getElementById("modalTitle").textContent = "Edit Item Category";
+        document.getElementById("modalSubtitle").textContent = "Update category information";
+
+        document.getElementById("categoryId").value = cat.id;
+        document.getElementById("categoryCode").value = cat.code || "";
+        document.getElementById("categoryName").value = cat.name || "";
+        document.getElementById("categoryStatus").value = cat.status || "Active";
+        document.getElementById("categoryDescription").value = cat.description || "";
+
+        document.getElementById("categoryModal").classList.add("show");
+    }
+
+    function closeCategoryModal() {
+        document.getElementById("categoryModal").classList.remove("show");
+        editingCategoryId = null;
+    }
+
+    /* =====================================================
+       SAVE CATEGORY
+    ===================================================== */
+    async function saveCategory() {
+        const name = document.getElementById("categoryName").value.trim();
+        const status = document.getElementById("categoryStatus").value;
+        const description = document.getElementById("categoryDescription").value.trim();
+
+        if (!name) {
+            showToast("Category name is required.", true);
+            return;
+        }
+
+        const payload = {
+            id: editingCategoryId || undefined,
+            name: name,
+            status: status,
+            description: description
+        };
+
+        const btn = document.getElementById("saveCategoryBtn");
+        btn.disabled = true;
+        btn.textContent = editingCategoryId ? "Updating..." : "Saving...";
+
+        try {
+            const method = editingCategoryId ? "PUT" : "POST";
+            await apiRequest("item_categories.php", {
+                method: method,
+                body: JSON.stringify(payload)
+            });
+
+            showToast(editingCategoryId ? "Category updated successfully!" : "Category created successfully!");
+            closeCategoryModal();
+            await loadCategories();
+        } catch (err) {
+            showToast(err.message || "Failed to save category.", true);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = editingCategoryId ? "Update Category" : "Save Category";
+        }
+    }
+
+    /* =====================================================
+       DELETE CATEGORY WITH SAFETY CHECK
+    ===================================================== */
+    async function deleteCategory(id) {
+        const cat = categories.find(c => String(c.id) === String(id));
+        if (!cat) return;
+
+        if (cat.item_count > 0) {
+            alert(`⚠️ Cannot Delete Category "${cat.name}"\n\nThis category currently has ${cat.item_count} item(s) assigned to it.\n\nPlease reassign or delete those items in Item Master before deleting this category.`);
+            return;
+        }
+
+        if (!confirm(`Are you sure you want to delete category "${cat.name}" (${cat.code})?`)) {
+            return;
+        }
+
+        try {
+            await apiRequest(`item_categories.php?id=${id}`, { method: "DELETE" });
+            showToast("Category deleted successfully!");
+            await loadCategories();
+        } catch (err) {
+            showToast(err.message || "Failed to delete category.", true);
+        }
+    }
+
+    // Modal dismiss
+    document.getElementById("categoryModal").addEventListener("click", function(e) {
+        if (e.target === this) closeCategoryModal();
+    });
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeCategoryModal();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard - Bluefinch</title>
+
+<link rel="stylesheet" href="../assets/css/style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+    <div class="sidebar-logo">
+
+        <div class="logo-icon">
+            B
+        </div>
+
+        <div>
+            <strong>Bluefinch</strong>
+            <small>Purchase Management</small>
+        </div>
+
+    </div>
+
+    <div class="nav-title">
+        Main Menu
+    </div>
+
+    <a href="dashboard.html"
+       class="nav-link active">
+        <span class="nav-icon">⌂</span>
+        <span>Dashboard</span>
+    </a>
+
+    <a href="purchase-orders.html"
+       class="nav-link">
+        <span class="nav-icon">▤</span>
+        <span>Purchase Orders</span>
+    </a>
+
+    <div class="nav-title">
+        Masters
+    </div>
+
+    <div class="nav-dropdown" id="supplierDropdown">
+        <button type="button" class="nav-dropdown-btn" id="supplierDropdownBtn" aria-expanded="false">
+            <span class="nav-icon">🏢</span>
+            <span class="nav-text">Supplier Master</span>
+            <span class="dropdown-arrow">▾</span>
+        </button>
+        <div class="nav-submenu">
+            <a href="suppliers.html" class="nav-sub-item">
+                <span class="nav-sub-dot"></span>
+                <span class="nav-sub-icon">📋</span>
+                <span>Suppliers</span>
+            </a>
+            <a href="suppliers.html?action=add" class="nav-sub-item">
+                <span class="nav-sub-dot"></span>
+                <span class="nav-sub-icon">➕</span>
+                <span>Add Supplier</span>
+            </a>
+            <a href="suppliers.html?action=group" class="nav-sub-item">
+                <span class="nav-sub-dot"></span>
+                <span class="nav-sub-icon">👥</span>
+                <span>Group Supplier</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ITEMS DROPDOWN -->
+    <div class="nav-dropdown" id="itemsDropdown">
+        <button type="button" class="nav-dropdown-btn" id="itemsDropdownBtn" aria-expanded="false">
+            <span class="nav-icon">📦</span>
+            <span class="nav-text">Items</span>
+            <span class="dropdown-arrow">▾</span>
+        </button>
+        <div class="nav-submenu">
+            <a href="items.html" class="nav-sub-item" id="navSubItemMaster">
+                <span class="nav-sub-dot"></span>
+                <span class="nav-sub-icon">◈</span>
+                <span>Item Master</span>
+            </a>
+            <a href="item-categories.html" class="nav-sub-item" id="navSubItemCategories">
+                <span class="nav-sub-dot"></span>
+                <span class="nav-sub-icon">🏷️</span>
+                <span>Item Categories</span>
+            </a>
+            <a href="units-of-measurement.html" class="nav-sub-item" id="navSubUnits">
+                <span class="nav-sub-dot"></span>
+                <span class="nav-sub-icon">📏</span>
+                <span>Units of Measurement</span>
+            </a>
+            <a href="item-supplier-mapping.html" class="nav-sub-item" id="navSubItemSupplierMapping">
+                <span class="nav-sub-dot"></span>
+                <span class="nav-sub-icon">🔗</span>
+                <span>Item-Supplier Mapping</span>
+            </a>
+            <a href="purchase-price-list.html" class="nav-sub-item" id="navSubPurchasePriceList">
+                <span class="nav-sub-dot"></span>
+                <span class="nav-sub-icon">💲</span>
+                <span>Purchase Price List</span>
+            </a>
+        </div>
+    </div>
+
+</aside>
+
+
+<main class="main">
+
+<header class="topbar">
+
+    <h2>Purchase Management</h2>
+
+    <div class="user-area">
+
+        <span>Administrator</span>
+
+        <div class="avatar">
+            A
+        </div>
+
+        <button
+            id="logoutBtn"
+            class="btn btn-secondary btn-small">
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<section class="content">
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Dashboard</h1>
+
+        <p>
+            Overview of your purchasing activities
+        </p>
+
+    </div>
+
+    <a
+        href="create-purchase-order.html"
+        class="btn btn-primary">
+        + Create Purchase Order
+    </a>
+
+</div>
+
+
+<div class="dashboard-cards">
+
+    <div class="card stat-card">
+
+        <div>
+
+            <div class="stat-title">
+                Total Purchase Orders
+            </div>
+
+            <div
+                id="totalOrders"
+                class="stat-number">
+                0
+            </div>
+
+        </div>
+
+        <div class="stat-icon">
+            ▤
+        </div>
+
+    </div>
+
+
+    <div class="card stat-card">
+
+        <div>
+
+            <div class="stat-title">
+                Draft Purchase Orders
+            </div>
+
+            <div
+                id="draftOrders"
+                class="stat-number">
+                0
+            </div>
+
+        </div>
+
+        <div class="stat-icon">
+            ◷
+        </div>
+
+    </div>
+
+
+    <div class="card stat-card">
+
+        <div>
+
+            <div class="stat-title">
+                Pending Purchase Orders
+            </div>
+
+            <div
+                id="pendingOrders"
+                class="stat-number">
+                0
+            </div>
+
+        </div>
+
+        <div class="stat-icon">
+            !
+        </div>
+
+    </div>
+
+
+    <div class="card stat-card">
+
+        <div>
+
+            <div class="stat-title">
+                Completed Purchase Orders
+            </div>
+
+            <div
+                id="completedOrders"
+                class="stat-number">
+                0
+            </div>
+
+        </div>
+
+        <div class="stat-icon">
+            ✓
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+<div class="card">
+
+    <h3 class="card-title">
+        Purchase Order Status
+    </h3>
+
+    <div
+        id="statusChart"
+        class="chart">
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h3 class="card-title">
+        Purchase Summary
+    </h3>
+
+    <div class="summary">
+
+        <div class="summary-row">
+            <span>Total Orders</span>
+            <strong id="summaryTotal">0</strong>
+        </div>
+
+        <div class="summary-row">
+            <span>Pending Orders</span>
+            <strong id="summaryPending">0</strong>
+        </div>
+
+        <div class="summary-row">
+            <span>Completed Orders</span>
+            <strong id="summaryCompleted">0</strong>
+        </div>
+
+        <div class="summary-row summary-total">
+            <span>Total Purchase Value</span>
+            <strong id="purchaseValue">
+                ₹ 0.00
+            </strong>
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/app.js"></script>
+
+<script>
+
+async function loadDashboard(){
+
+    try{
+
+        const response =
+            await apiRequest("dashboard.php");
+
+        const data = response.data;
+
+        document.getElementById("totalOrders")
+            .textContent = data.total;
+
+        document.getElementById("draftOrders")
+            .textContent = data.draft;
+
+        document.getElementById("pendingOrders")
+            .textContent = data.pending;
+
+        document.getElementById("completedOrders")
+            .textContent = data.completed;
+
+        document.getElementById("summaryTotal")
+            .textContent = data.total;
+
+        document.getElementById("summaryPending")
+            .textContent = data.pending;
+
+        document.getElementById("summaryCompleted")
+            .textContent = data.completed;
+
+        document.getElementById("purchaseValue")
+            .textContent = formatMoney(data.total_value);
+
+
+        const chartData = [
+
+            ["Draft", data.draft],
+            ["Pending", data.pending],
+            ["Completed", data.completed],
+            ["Cancelled", data.cancelled]
+
+        ];
+
+        const maxValue = Math.max(
+            1,
+            ...chartData.map(item => item[1])
+        );
+
+        document.getElementById("statusChart")
+            .innerHTML = chartData.map(item => {
+
+                const height =
+                    Math.max(
+                        10,
+                        (item[1] / maxValue) * 160
+                    );
+
+                return `
+                    <div class="chart-bar-wrapper">
+
+                        <strong>
+                            ${item[1]}
+                        </strong>
+
+                        <div
+                            class="chart-bar"
+                            style="height:${height}px">
+                        </div>
+
+                        <div class="chart-label">
+                            ${item[0]}
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("");
+
+    }
+    catch(error){
+
+        showToast(
+            error.message,
+            true
+        );
+
+    }
+
+}
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>

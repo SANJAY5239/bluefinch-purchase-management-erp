@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Price List | Bluefinch ERP</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <style>
+        .price-page {
+            padding: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .page-title p {
+            margin: 6px 0 0;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .add-btn {
+            flex-shrink: 0;
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+        }
+
+        .filter-card {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 240px;
+            max-width: 380px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 42px;
+            padding: 0 15px 0 40px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            font-size: 13px;
+            color: #0f172a;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        .search-box input:focus {
+            background: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .filter-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            height: 42px;
+            padding: 0 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #334155;
+            background: #ffffff;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+            max-width: 200px;
+        }
+
+        .filter-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .table-card {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .table-header {
+            width: 100%;
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .table-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .erp-table {
+            width: 100%;
+            min-width: 1100px;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+        .erp-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .erp-table td {
+            padding: 15px 18px;
+            color: #334155;
+            font-size: 13px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .erp-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .erp-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: modalFadeIn 0.2s ease forwards;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content {
+            width: 680px;
+            max-width: 100%;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px 26px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .modal-header p {
+            margin: 4px 0 0;
+            font-size: 12.5px;
+            color: #64748b;
+        }
+
+        .close-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: #f1f5f9;
+            border-radius: 8px;
+            color: #64748b;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .modal-body {
+            padding: 24px 26px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            margin-bottom: 7px;
+            color: #334155;
+            font-size: 12.5px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            height: 42px;
+            padding: 0 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #0f172a;
+            background: #ffffff;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 26px;
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 0 0 14px 14px;
+        }
+
+        .cancel-btn {
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #475569;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .cancel-btn:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .save-btn {
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-logo">
+                <div class="logo-icon">B</div>
+                <div>
+                    <strong>Bluefinch</strong>
+                    <small>Purchase Management</small>
+                </div>
+            </div>
+
+            <div class="nav-title">
+                Main Menu
+            </div>
+
+            <a href="dashboard.html" class="nav-link">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="purchase-orders.html" class="nav-link">
+                <span class="nav-icon">▤</span>
+                <span>Purchase Orders</span>
+            </a>
+
+            <div class="nav-title">
+                Masters
+            </div>
+
+            <!-- SUPPLIER MASTER DROPDOWN -->
+            <div class="nav-dropdown" id="supplierDropdown">
+                <button type="button" class="nav-dropdown-btn" id="supplierDropdownBtn" aria-expanded="false">
+                    <span class="nav-icon">🏢</span>
+                    <span class="nav-text">Supplier Master</span>
+                    <span class="dropdown-arrow">▾</span>
+                </button>
+                <div class="nav-submenu">
+                    <a href="suppliers.html" class="nav-sub-item">
+                        <span class="nav-sub-dot"></span>
+                        <span class="nav-sub-icon">📋</span>
+                        <span>Suppliers</span>
+                    </a>
+                    <a href="suppliers.html?action=add" class="nav-sub-item">
+                        <span class="nav-sub-dot"></span>
+                        <span class="nav-sub-icon">➕</span>
+                        <span>Add Supplier</span>
+                    </a>
+                    <a href="suppliers.html?action=group" class="nav-sub-item">
+                        <span class="nav-sub-dot"></span>
+                        <span class="nav-sub-icon">👥</span>
+                        <span>Group Supplier</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ITEMS DROPDOWN -->
+            <div class="nav-dropdown open active" id="itemsDropdown">
+                <button type="button" class="nav-dropdown-btn" id="itemsDropdownBtn" aria-expanded="true">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">Items</span>
+                    <span class="dropdown-arrow">▾</span>
+                </button>
+                <div class="nav-submenu">
+                    <a href="items.html" class="nav-sub-item" id="navSubItemMaster">
+                        <span class="nav-sub-dot"></span>
+                        <span class="nav-sub-icon">◈</span>
+                        <span>Item Master</span>
+                    </a>
+                    <a href="item-categories.html" class="nav-sub-item" id="navSubItemCategories">
+                        <span class="nav-sub-dot"></span>
+                        <span class="nav-sub-icon">🏷️</span>
+                        <span>Item Categories</span>
+                    </a>
+                    <a href="units-of-measurement.html" class="nav-sub-item" id="navSubUnits">
+                        <span class="nav-sub-dot"></span>
+                        <span class="nav-sub-icon">📏</span>
+                        <span>Units of Measurement</span>
+                    </a>
+                    <a href="item-supplier-mapping.html" class="nav-sub-item" id="navSubItemSupplierMapping">
+                        <span class="nav-sub-dot"></span>
+                        <span class="nav-sub-icon">🔗</span>
+                        <span>Item-Supplier Mapping</span>
+                    </a>
+                    <a href="purchase-price-list.html" class="nav-sub-item active" id="navSubPurchasePriceList">
+                        <span class="nav-sub-dot"></span>
+                        <span class="nav-sub-icon">💲</span>
+                        <span>Purchase Price List</span>
+                    </a>
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+        <main class="main">
+
+            <!-- TOP BAR -->
+            <header class="topbar">
+                <h2>Purchase Management</h2>
+                <div class="user-area">
+                    <span>Administrator</span>
+                    <div class="avatar">A</div>
+                    <button id="logoutBtn" class="btn btn-secondary btn-small">
+                        Logout
+                    </button>
+                </div>
+            </header>
+
+            <section class="content price-page">
+
+                <!-- PAGE HEADER -->
+                <div class="page-header">
+
+                    <div class="page-title">
+                        <h1>Purchase Price List</h1>
+                        <p>
+                            Track vendor purchasing price agreements, effective date ranges, and lowest market supplier
+                            rates
+                        </p>
+                    </div>
+
+                    <div class="header-actions">
+                        <button type="button" class="add-btn" onclick="openPriceModal()">
+                            <span>＋</span> Add Purchase Price
+                        </button>
+                    </div>
+
+                </div>
+
+
+                <!-- FILTER & SEARCH CARD -->
+                <div class="filter-card">
+
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="searchInput" placeholder="Search item, supplier, price code..."
+                            autocomplete="off">
+                    </div>
+
+                    <div class="filter-controls">
+                        <select id="itemFilter" class="filter-select" onchange="filterPrices()">
+                            <option value="">All Items</option>
+                        </select>
+
+                        <select id="supplierFilter" class="filter-select" onchange="filterPrices()">
+                            <option value="">All Suppliers</option>
+                        </select>
+
+                        <select id="statusFilter" class="filter-select" onchange="filterPrices()">
+                            <option value="">All Status</option>
+                            <option value="Active" selected>Active Only</option>
+                            <option value="Historical">Historical</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <!-- TABLE CARD -->
+                <div class="table-card">
+
+                    <div class="table-header">
+                        <h2>Price List Directory</h2>
+                        <p id="priceCount">Loading price records...</p>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="erp-table">
+                            <thead>
+                                <tr>
+                                    <th>Price Code</th>
+                                    <th>Item Details</th>
+                                    <th>Supplier Details</th>
+                                    <th>Purchase Price</th>
+                                    <th>Tax</th>
+                                    <th>Effective From</th>
+                                    <th>Effective To</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="priceTableBody">
+                                <tr>
+                                    <td colspan="9" class="loading">Loading purchase price records...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ADD / EDIT PRICE MODAL -->
+    <div class="modal" id="priceModal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalTitle">Add Purchase Price</h2>
+                    <p id="modalSubtitle">Configure negotiated purchasing price and effective validity window</p>
+                </div>
+                <button type="button" class="close-btn" onclick="closePriceModal()">×</button>
+            </div>
+
+            <form id="priceForm" class="modal-body" onsubmit="event.preventDefault(); savePrice();">
+                <input type="hidden" id="priceId">
+
+                <div class="form-grid">
+
+                    <!-- ITEM -->
+                    <div class="form-group full">
+                        <label>Select Item *</label>
+                        <select id="priceItemSelect" required>
+                            <option value="">Select Item</option>
+                        </select>
+                    </div>
+
+                    <!-- SUPPLIER -->
+                    <div class="form-group full">
+                        <label>Select Supplier *</label>
+                        <select id="priceSupplierSelect" required>
+                            <option value="">Select Supplier</option>
+                        </select>
+                    </div>
+
+                    <!-- PURCHASE PRICE -->
+                    <div class="form-group">
+                        <label>Purchase Price (₹) *</label>
+                        <input type="number" id="pricePurchasePrice" step="0.01" min="0" placeholder="0.00" required>
+                    </div>
+
+                    <!-- TAX -->
+                    <div class="form-group">
+                        <label>Tax (%) *</label>
+                        <input type="number" id="priceTax" step="0.01" min="0" placeholder="5.0" value="5.0" required>
+                    </div>
+
+                    <!-- EFFECTIVE FROM -->
+                    <div class="form-group">
+                        <label>Effective From *</label>
+                        <input type="date" id="priceEffectiveFrom" required>
+                    </div>
+
+                    <!-- EFFECTIVE TO -->
+                    <div class="form-group">
+                        <label>Effective To (Optional)</label>
+                        <input type="date" id="priceEffectiveTo">
+                    </div>
+
+                    <!-- STATUS -->
+                    <div class="form-group full">
+                        <label>Status *</label>
+                        <select id="priceStatus" required>
+                            <option value="Active">Active</option>
+                            <option value="Historical">Historical</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer" style="margin: 24px -26px -26px -26px;">
+                    <button type="button" class="cancel-btn" onclick="closePriceModal()">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="save-btn" id="savePriceBtn">
+                        Save Purchase Price
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast" style="display:none;"></div>
+
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/app.js"></script>
+
+    <script>
+        /* =====================================================
+           API ENDPOINTS & STATE
+        ===================================================== */
+        let prices = [];
+        let items = [];
+        let suppliers = [];
+        let editingPriceId = null;
+
+        /* =====================================================
+           INITIALIZATION
+        ===================================================== */
+        document.addEventListener("DOMContentLoaded", async function () {
+            await Promise.all([
+                loadItemsData(),
+                loadSuppliersData(),
+                loadPrices()
+            ]);
+
+            document.getElementById("searchInput").addEventListener("input", filterPrices);
+        });
+
+        /* =====================================================
+           LOAD SUPPORTING DATA
+        ===================================================== */
+        async function loadItemsData() {
+            try {
+                const res = await apiRequest("items.php");
+                items = res.data || [];
+
+                const itemFilter = document.getElementById("itemFilter");
+                const priceItemSelect = document.getElementById("priceItemSelect");
+
+                itemFilter.innerHTML = '<option value="">All Items</option>';
+                priceItemSelect.innerHTML = '<option value="">Select Item</option>';
+
+                items.forEach(it => {
+                    if (it.status === "Active" || !it.status) {
+                        const opt1 = document.createElement("option");
+                        opt1.value = it.id;
+                        opt1.textContent = `${it.code} - ${it.name}`;
+                        itemFilter.appendChild(opt1);
+
+                        const opt2 = document.createElement("option");
+                        opt2.value = it.id;
+                        opt2.textContent = `${it.code} - ${it.name}`;
+                        priceItemSelect.appendChild(opt2);
+                    }
+                });
+            } catch (err) {
+                console.error("Error loading items:", err);
+            }
+        }
+
+        async function loadSuppliersData() {
+            try {
+                const res = await apiRequest("suppliers.php");
+                suppliers = res.data || [];
+
+                const supplierFilter = document.getElementById("supplierFilter");
+                const priceSupplierSelect = document.getElementById("priceSupplierSelect");
+
+                supplierFilter.innerHTML = '<option value="">All Suppliers</option>';
+                priceSupplierSelect.innerHTML = '<option value="">Select Supplier</option>';
+
+                suppliers.forEach(sup => {
+                    if (sup.status === "Active" || !sup.status) {
+                        const sCode = sup.code || sup.supplier_code || "SUP";
+                        const sName = sup.name || sup.supplier_name || "Supplier";
+
+                        const opt1 = document.createElement("option");
+                        opt1.value = sup.id;
+                        opt1.textContent = `${sCode} - ${sName}`;
+                        supplierFilter.appendChild(opt1);
+
+                        const opt2 = document.createElement("option");
+                        opt2.value = sup.id;
+                        opt2.textContent = `${sCode} - ${sName}`;
+                        priceSupplierSelect.appendChild(opt2);
+                    }
+                });
+            } catch (err) {
+                console.error("Error loading suppliers:", err);
+            }
+        }
+
+        /* =====================================================
+           LOAD PRICES
+        ===================================================== */
+        async function loadPrices() {
+            const tbody = document.getElementById("priceTableBody");
+            const count = document.getElementById("priceCount");
+
+            tbody.innerHTML = `<tr><td colspan="9" class="loading">Loading prices...</td></tr>`;
+
+            try {
+                const res = await apiRequest("purchase_prices.php");
+                prices = res.data || [];
+                filterPrices();
+            } catch (err) {
+                console.error("Error loading prices:", err);
+                count.textContent = "Unable to load price list";
+                tbody.innerHTML = `
+                <tr>
+                    <td colspan="9" class="empty">
+                        ❌ Unable to load purchase prices: ${escapeHTML(err.message)}
+                    </td>
+                </tr>
+            `;
+            }
+        }
+
+        /* =====================================================
+           FILTER & RENDER
+        ===================================================== */
+        function filterPrices() {
+            const search = document.getElementById("searchInput").value.trim().toLowerCase();
+            const itemId = document.getElementById("itemFilter").value;
+            const supplierId = document.getElementById("supplierFilter").value;
+            const status = document.getElementById("statusFilter").value;
+
+            const filtered = prices.filter(p => {
+                const matchSearch = !search || (
+                    String(p.price_code || "").toLowerCase().includes(search) ||
+                    String(p.item_code || "").toLowerCase().includes(search) ||
+                    String(p.item_name || "").toLowerCase().includes(search) ||
+                    String(p.supplier_code || "").toLowerCase().includes(search) ||
+                    String(p.supplier_name || "").toLowerCase().includes(search)
+                );
+                const matchItem = !itemId || (String(p.item_id) === String(itemId));
+                const matchSupplier = !supplierId || (String(p.supplier_id) === String(supplierId));
+                const matchStatus = !status || (String(p.status || "").toLowerCase() === status.toLowerCase());
+
+                return matchSearch && matchItem && matchSupplier && matchStatus;
+            });
+
+            const tbody = document.getElementById("priceTableBody");
+            const count = document.getElementById("priceCount");
+
+            count.textContent = `${filtered.length} price record${filtered.length === 1 ? '' : 's'} found`;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                <tr>
+                    <td colspan="9" class="empty">
+                        No purchase price records found matching criteria.
+                    </td>
+                </tr>
+            `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(p => {
+                const status = p.status || "Active";
+                const isAct = status.toLowerCase() === "active";
+                const isHist = status.toLowerCase() === "historical";
+
+                let statusBadgeHtml = `<span class="badge badge-completed">Active</span>`;
+                if (isHist) {
+                    statusBadgeHtml = `<span class="badge-historical">Historical</span>`;
+                } else if (!isAct) {
+                    statusBadgeHtml = `<span class="badge badge-cancelled">${escapeHTML(status)}</span>`;
+                }
+
+                // Badges for lowest price and preferred supplier
+                const badges = [];
+                if (p.is_lowest_price) {
+                    badges.push(`<span class="badge-lowest" title="Lowest current supplier price for this item">⭐ Lowest</span>`);
+                }
+                if (p.is_preferred_supplier) {
+                    badges.push(`<span class="badge-preferred" title="Preferred supplier for this item">⭐ Preferred</span>`);
+                }
+
+                return `
+                <tr>
+                    <td>
+                        <span class="code-badge">
+                            ${escapeHTML(p.price_code || `PRC000${p.id}`)}
+                        </span>
+                    </td>
+                    <td>
+                        <div>
+                            <strong style="color: #0f172a; font-size: 13.5px;">
+                                ${escapeHTML(p.item_name || "-")}
+                            </strong>
+                            <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
+                                Code: ${escapeHTML(p.item_code || "-")}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <strong style="color: #1e293b; font-size: 13px;">
+                                🏢 ${escapeHTML(p.supplier_name || "-")}
+                            </strong>
+                            <div style="font-size: 11.5px; color: #64748b; margin-top: 2px;">
+                                Code: ${escapeHTML(p.supplier_code || "-")}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <strong style="color: #0f172a; font-size: 14.5px;">
+                                ${formatMoney(p.purchase_price)}
+                            </strong>
+                            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                                ${badges.join(" ")}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        ${escapeHTML(p.tax || 0)}%
+                    </td>
+                    <td>
+                        <span style="font-size: 12.5px; color: #334155;">
+                            ${escapeHTML(p.effective_from || "-")}
+                        </span>
+                    </td>
+                    <td>
+                        <span style="font-size: 12.5px; color: #64748b;">
+                            ${escapeHTML(p.effective_to || "Ongoing")}
+                        </span>
+                    </td>
+                    <td>
+                        ${statusBadgeHtml}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button
+                                type="button"
+                                class="edit-btn"
+                                title="Edit Price"
+                                onclick="editPrice(${p.id})"
+                            >
+                                ✏️
+                            </button>
+                            <button
+                                type="button"
+                                class="delete-btn"
+                                title="Delete Price"
+                                onclick="deletePrice(${p.id})"
+                            >
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            }).join("");
+        }
+
+        /* =====================================================
+           ADD / EDIT MODAL
+        ===================================================== */
+        function openPriceModal() {
+            editingPriceId = null;
+            document.getElementById("priceForm").reset();
+            document.getElementById("priceId").value = "";
+            document.getElementById("modalTitle").textContent = "Add Purchase Price";
+            document.getElementById("modalSubtitle").textContent = "Configure negotiated purchasing price and effective validity window";
+            document.getElementById("priceTax").value = "5.0";
+            document.getElementById("priceStatus").value = "Active";
+            document.getElementById("priceEffectiveFrom").value = new Date().toISOString().split("T")[0];
+
+            document.getElementById("priceModal").classList.add("show");
+        }
+
+        function editPrice(id) {
+            const p = prices.find(item => String(item.id) === String(id));
+            if (!p) {
+                showToast("Price record not found", true);
+                return;
+            }
+
+            editingPriceId = p.id;
+            document.getElementById("modalTitle").textContent = "Edit Purchase Price";
+            document.getElementById("modalSubtitle").textContent = "Update price, tax percentage, or date range";
+
+            document.getElementById("priceId").value = p.id;
+            document.getElementById("priceItemSelect").value = p.item_id || "";
+            document.getElementById("priceSupplierSelect").value = p.supplier_id || "";
+            document.getElementById("pricePurchasePrice").value = p.purchase_price || "";
+            document.getElementById("priceTax").value = p.tax ?? "5.0";
+            document.getElementById("priceEffectiveFrom").value = p.effective_from || "";
+            document.getElementById("priceEffectiveTo").value = p.effective_to || "";
+            document.getElementById("priceStatus").value = p.status || "Active";
+
+            document.getElementById("priceModal").classList.add("show");
+        }
+
+        function closePriceModal() {
+            document.getElementById("priceModal").classList.remove("show");
+            editingPriceId = null;
+        }
+
+        /* =====================================================
+           SAVE PRICE
+        ===================================================== */
+        async function savePrice() {
+            const itemId = document.getElementById("priceItemSelect").value;
+            const supplierId = document.getElementById("priceSupplierSelect").value;
+            const purchasePrice = parseFloat(document.getElementById("pricePurchasePrice").value);
+            const tax = parseFloat(document.getElementById("priceTax").value);
+            const effectiveFrom = document.getElementById("priceEffectiveFrom").value;
+            const effectiveTo = document.getElementById("priceEffectiveTo").value;
+            const status = document.getElementById("priceStatus").value;
+
+            if (!itemId) {
+                showToast("Please select an item.", true);
+                return;
+            }
+            if (!supplierId) {
+                showToast("Please select a supplier.", true);
+                return;
+            }
+            if (isNaN(purchasePrice) || purchasePrice < 0) {
+                showToast("Purchase price must be a valid positive amount.", true);
+                return;
+            }
+            if (!effectiveFrom) {
+                showToast("Effective From date is required.", true);
+                return;
+            }
+
+            const payload = {
+                id: editingPriceId || undefined,
+                item_id: parseInt(itemId),
+                supplier_id: parseInt(supplierId),
+                purchase_price: purchasePrice,
+                tax: isNaN(tax) ? 5.0 : tax,
+                effective_from: effectiveFrom,
+                effective_to: effectiveTo,
+                status: status
+            };
+
+            const btn = document.getElementById("savePriceBtn");
+            btn.disabled = true;
+            btn.textContent = editingPriceId ? "Updating..." : "Saving...";
+
+            try {
+                const method = editingPriceId ? "PUT" : "POST";
+                await apiRequest("purchase_prices.php", {
+                    method: method,
+                    body: JSON.stringify(payload)
+                });
+
+                showToast(editingPriceId ? "Purchase price updated successfully!" : "Purchase price record created successfully!");
+                closePriceModal();
+                await loadPrices();
+            } catch (err) {
+                showToast(err.message || "Failed to save purchase price.", true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = editingPriceId ? "Update Price" : "Save Purchase Price";
+            }
+        }
+
+        /* =====================================================
+           DELETE PRICE
+        ===================================================== */
+        async function deletePrice(id) {
+            const p = prices.find(item => String(item.id) === String(id));
+            if (!p) return;
+
+            if (!confirm(`Are you sure you want to delete this price record for "${p.item_name}" from "${p.supplier_name}"?`)) {
+                return;
+            }
+
+            try {
+                await apiRequest(`purchase_prices.php?id=${id}`, { method: "DELETE" });
+                showToast("Purchase price record deleted successfully!");
+                await loadPrices();
+            } catch (err) {
+                showToast(err.message || "Failed to delete price record.", true);
+            }
+        }
+
+        // Modal dismiss
+        document.getElementById("priceModal").addEventListener("click", function (e) {
+            if (e.target === this) closePriceModal();
+        });
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") closePriceModal();
+        });
+    </script>
+
+</body>
+
+</html>

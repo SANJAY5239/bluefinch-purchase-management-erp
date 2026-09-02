@@ -1,0 +1,18 @@
+{
+  "name": "bluefinch-dashboard",
+  "version": "1.0.0",
+  "description": "Bluefinch ERP Dashboard - Node.js Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.2",
+    "pdfkit": "^0.20.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

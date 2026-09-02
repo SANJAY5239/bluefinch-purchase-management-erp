@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "code": "CAT0001",
+        "name": "Electronics",
+        "description": "Electronic gadgets, computers, displays, and peripheral devices",
+        "status": "Active",
+        "created_at": "2026-08-20 10:00:00"
+    },
+    {
+        "id": 2,
+        "code": "CAT0002",
+        "name": "Office Equipment",
+        "description": "Printers, copiers, shredders, scanners, and heavy office machinery",
+        "status": "Active",
+        "created_at": "2026-08-20 10:15:00"
+    },
+    {
+        "id": 3,
+        "code": "CAT0003",
+        "name": "Furniture",
+        "description": "Office desks, ergonomic chairs, storage cabinets, and workstations",
+        "status": "Active",
+        "created_at": "2026-08-20 10:30:00"
+    },
+    {
+        "id": 4,
+        "code": "CAT0004",
+        "name": "Stationery",
+        "description": "Paper reams, writing instruments, files, notebooks, and binders",
+        "status": "Active",
+        "created_at": "2026-08-20 11:00:00"
+    },
+    {
+        "id": 5,
+        "code": "CAT0005",
+        "name": "Raw Materials",
+        "description": "Basic industrial inputs, polymers, metals, and packaging raw materials",
+        "status": "Active",
+        "created_at": "2026-08-20 11:30:00"
+    },
+    {
+        "id": 6,
+        "code": "CAT0006",
+        "name": "Spare Parts",
+        "description": "Maintenance components, belts, cables, valves, and hardware fittings",
+        "status": "Active",
+        "created_at": "2026-08-20 12:00:00"
+    }
+]

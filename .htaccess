@@ -1,0 +1,7 @@
+Options -Indexes
+
+DirectoryIndex index.html
+
+<FilesMatch "\.json$">
+    Require all denied
+</FilesMatch>

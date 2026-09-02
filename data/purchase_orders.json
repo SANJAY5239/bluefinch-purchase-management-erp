@@ -1,0 +1,134 @@
+[
+    {
+        "id": "3",
+        "po_date": "2026-08-25",
+        "supplier_id": 3,
+        "supplier_name": "ABC office supplies",
+        "expected_delivery_date": "2000-05-04",
+        "reference_number": "",
+        "payment_terms": "30 Days",
+        "delivery_location": "Kochi Office",
+        "notes": "hghyuyugugju",
+        "items": [
+            {
+                "item_id": 1,
+                "item_code": "ITM0001",
+                "description": "Intel Core i7 11th Gen, 16GB DDR4 RAM, 512GB NVMe SSD, Windows 11 Pro",
+                "quantity": 1,
+                "unit": "PCS",
+                "unit_price": 450,
+                "discount": 4,
+                "tax": 5,
+                "line_total": 453.6
+            }
+        ],
+        "subtotal": 450,
+        "total_discount": 18,
+        "total_tax": 21.6,
+        "additional_charges": 0,
+        "grand_total": 453.6,
+        "status": "Pending",
+        "po_number": "PO0003",
+        "created_by": "Admin",
+        "created_at": "2026-08-25 11:59:28"
+    },
+    {
+        "po_date": "2026-08-25",
+        "supplier_id": 1,
+        "supplier_name": "ABC Office Supplies",
+        "expected_delivery_date": "2026-04-04",
+        "reference_number": "REF-1001",
+        "payment_terms": "30 Days",
+        "delivery_location": "Kochi Office",
+        "notes": "hereee",
+        "items": [
+            {
+                "item_id": 2,
+                "item_code": "ITM0002",
+                "description": "Ergonomic Office Chair",
+                "quantity": 1,
+                "unit": "Nos",
+                "unit_price": 8500,
+                "discount": 0,
+                "tax": 18,
+                "line_total": 10030
+            }
+        ],
+        "subtotal": 8500,
+        "total_discount": 0,
+        "total_tax": 1530,
+        "additional_charges": 0,
+        "grand_total": 10030,
+        "status": "Pending",
+        "id": 4,
+        "po_number": "PO0004",
+        "created_by": "Admin",
+        "created_at": "2026-08-25 12:16:51"
+    },
+    {
+        "po_date": "2026-08-25",
+        "supplier_id": 1,
+        "supplier_name": "ABC Office Supplies",
+        "expected_delivery_date": "2026-05-04",
+        "reference_number": "REF-1001",
+        "payment_terms": "30 Days",
+        "delivery_location": "Kochi Office",
+        "notes": "hekllooo",
+        "items": [
+            {
+                "item_id": 2,
+                "item_code": "ITM0002",
+                "description": "Ergonomic Office Chair",
+                "quantity": 1,
+                "unit": "Nos",
+                "unit_price": 8500,
+                "discount": 0,
+                "tax": 18,
+                "line_total": 10030
+            }
+        ],
+        "subtotal": 8500,
+        "total_discount": 0,
+        "total_tax": 1530,
+        "additional_charges": 0,
+        "grand_total": 10030,
+        "status": "Pending",
+        "id": 5,
+        "po_number": "PO0005",
+        "created_by": "Admin",
+        "created_at": "2026-08-25 12:23:17"
+    },
+    {
+        "po_date": "2026-08-25",
+        "supplier_id": 2,
+        "supplier_name": "Tech Source India",
+        "expected_delivery_date": "2000-05-04",
+        "reference_number": "REF-1001",
+        "payment_terms": "30 Days",
+        "delivery_location": "Kochi Office",
+        "notes": "hdhsjjjhs",
+        "items": [
+            {
+                "item_id": 6,
+                "item_code": "ITM0006",
+                "description": "hdshdhkjdfjsd",
+                "quantity": 1,
+                "unit": "Nos",
+                "unit_price": 40000,
+                "discount": 0,
+                "tax": 5,
+                "line_total": 42000
+            }
+        ],
+        "subtotal": 40000,
+        "total_discount": 0,
+        "total_tax": 2000,
+        "additional_charges": 0,
+        "grand_total": 42000,
+        "status": "Draft",
+        "id": 6,
+        "po_number": "PO0006",
+        "created_by": "Admin",
+        "created_at": "2026-08-25 12:26:47"
+    }
+]

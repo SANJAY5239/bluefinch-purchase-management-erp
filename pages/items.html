@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Master | Bluefinch ERP</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <style>
+        .item-page {
+            padding: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .page-title p {
+            margin: 6px 0 0;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .add-btn {
+            flex-shrink: 0;
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .add-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+        }
+
+        .filter-card {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 22px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 260px;
+            max-width: 480px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .search-box input {
+            width: 100%;
+            height: 42px;
+            padding: 0 15px 0 40px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            font-size: 13px;
+            color: #0f172a;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        .search-box input:focus {
+            background: #ffffff;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .filter-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            height: 42px;
+            padding: 0 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #334155;
+            background: #ffffff;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .filter-select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .table-card {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .table-header {
+            width: 100%;
+            padding: 18px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .table-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .erp-table {
+            width: 100%;
+            min-width: 1100px;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+
+        .erp-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .erp-table td {
+            padding: 15px 18px;
+            color: #334155;
+            font-size: 13px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .erp-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .erp-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .item-name-cell {
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 13.5px;
+        }
+
+        .desc-cell {
+            max-width: 220px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #64748b;
+            font-size: 12.5px;
+        }
+
+        .price-text {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 13px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .edit-btn:hover {
+            background: #dbeafe;
+            color: #1d4ed8;
+            transform: scale(1.05);
+        }
+
+        .delete-btn {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        .delete-btn:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: modalFadeIn 0.2s ease forwards;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content {
+            width: 760px;
+            max-width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px 26px;
+            border-bottom: 1px solid #e2e8f0;
+            background: #ffffff;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .modal-header p {
+            margin: 4px 0 0;
+            font-size: 12.5px;
+            color: #64748b;
+        }
+
+        .close-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            padding: 0;
+            border: none;
+            background: #f1f5f9;
+            border-radius: 8px;
+            color: #64748b;
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .modal-body {
+            padding: 24px 26px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            margin-bottom: 7px;
+            color: #334155;
+            font-size: 12.5px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            height: 42px;
+            padding: 0 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #0f172a;
+            background: #ffffff;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group textarea {
+            height: 80px;
+            padding: 10px 14px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 26px;
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 0 0 14px 14px;
+        }
+
+        .cancel-btn {
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #475569;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .cancel-btn:hover {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .save-btn {
+            border: none;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        }
+
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            <div class="logo-icon">B</div>
+            <div>
+                <strong>Bluefinch</strong>
+                <small>Purchase Management</small>
+            </div>
+        </div>
+
+        <div class="nav-title">
+            Main Menu
+        </div>
+
+        <a href="dashboard.html" class="nav-link">
+            <span class="nav-icon">⌂</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="purchase-orders.html" class="nav-link">
+            <span class="nav-icon">▤</span>
+            <span>Purchase Orders</span>
+        </a>
+
+        <div class="nav-title">
+            Masters
+        </div>
+
+        <!-- SUPPLIER MASTER DROPDOWN -->
+        <div class="nav-dropdown" id="supplierDropdown">
+            <button type="button" class="nav-dropdown-btn" id="supplierDropdownBtn" aria-expanded="false">
+                <span class="nav-icon">🏢</span>
+                <span class="nav-text">Supplier Master</span>
+                <span class="dropdown-arrow">▾</span>
+            </button>
+            <div class="nav-submenu">
+                <a href="suppliers.html" class="nav-sub-item">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">📋</span>
+                    <span>Suppliers</span>
+                </a>
+                <a href="suppliers.html?action=add" class="nav-sub-item">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">➕</span>
+                    <span>Add Supplier</span>
+                </a>
+                <a href="suppliers.html?action=group" class="nav-sub-item">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">👥</span>
+                    <span>Group Supplier</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- ITEMS DROPDOWN -->
+        <div class="nav-dropdown open active" id="itemsDropdown">
+            <button type="button" class="nav-dropdown-btn" id="itemsDropdownBtn" aria-expanded="true">
+                <span class="nav-icon">📦</span>
+                <span class="nav-text">Items</span>
+                <span class="dropdown-arrow">▾</span>
+            </button>
+            <div class="nav-submenu">
+                <a href="items.html" class="nav-sub-item active" id="navSubItemMaster">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">◈</span>
+                    <span>Item Master</span>
+                </a>
+                <a href="item-categories.html" class="nav-sub-item" id="navSubItemCategories">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">🏷️</span>
+                    <span>Item Categories</span>
+                </a>
+                <a href="units-of-measurement.html" class="nav-sub-item" id="navSubUnits">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">📏</span>
+                    <span>Units of Measurement</span>
+                </a>
+                <a href="item-supplier-mapping.html" class="nav-sub-item" id="navSubItemSupplierMapping">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">🔗</span>
+                    <span>Item-Supplier Mapping</span>
+                </a>
+                <a href="purchase-price-list.html" class="nav-sub-item" id="navSubPurchasePriceList">
+                    <span class="nav-sub-dot"></span>
+                    <span class="nav-sub-icon">💲</span>
+                    <span>Purchase Price List</span>
+                </a>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <h2>Purchase Management</h2>
+            <div class="user-area">
+                <span>Administrator</span>
+                <div class="avatar">A</div>
+                <button id="logoutBtn" class="btn btn-secondary btn-small">
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <section class="content item-page">
+
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+
+                <div class="page-title">
+                    <h1>Item Master</h1>
+                    <p>
+                        Manage product items, specifications, units, categories, and standard purchasing prices
+                    </p>
+                </div>
+
+                <div class="header-actions">
+                    <button
+                        type="button"
+                        class="add-btn"
+                        onclick="openItemModal()"
+                    >
+                        <span>＋</span> Add New Item
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- FILTER & SEARCH CARD -->
+            <div class="filter-card">
+
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search item code, name, description, category, unit..."
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="filter-controls">
+                    <select id="categoryFilter" class="filter-select" onchange="applyFilters()">
+                        <option value="">All Categories</option>
+                    </select>
+
+                    <select id="statusFilter" class="filter-select" onchange="applyFilters()">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+            </div>
+
+
+            <!-- TABLE CARD -->
+            <div class="table-card">
+
+                <div class="table-header">
+                    <h2>Items Directory</h2>
+                    <p id="itemCount">Loading items...</p>
+                </div>
+
+                <div class="table-container">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" onclick="sortTable('code')">Item Code <span class="sort-icon" id="sort-code">↕</span></th>
+                                <th class="sortable" onclick="sortTable('name')">Item Name <span class="sort-icon" id="sort-name">↕</span></th>
+                                <th>Description</th>
+                                <th class="sortable" onclick="sortTable('category')">Category <span class="sort-icon" id="sort-category">↕</span></th>
+                                <th>Unit</th>
+                                <th class="sortable" onclick="sortTable('purchase_price')">Purchase Price <span class="sort-icon" id="sort-purchase_price">↕</span></th>
+                                <th>Tax</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="itemTableBody">
+                            <tr>
+                                <td colspan="9" class="loading">Loading items...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="erp-pagination" id="paginationContainer" style="display:none;">
+                    <div id="paginationInfo">Showing 1 to 10 of 10 items</div>
+                    <div class="pagination-buttons" id="paginationButtons"></div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ADD / EDIT ITEM MODAL -->
+<div class="modal" id="itemModal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <div>
+                <h2 id="modalTitle">Add New Item</h2>
+                <p id="modalSubtitle">Fill in item details, classification, and purchasing pricing</p>
+            </div>
+            <button type="button" class="close-btn" onclick="closeItemModal()">×</button>
+        </div>
+
+        <form id="itemForm" class="modal-body" onsubmit="event.preventDefault(); saveItem();">
+            <input type="hidden" id="itemId">
+
+            <div class="form-grid">
+
+                <!-- ITEM CODE -->
+                <div class="form-group">
+                    <label>Item Code</label>
+                    <input
+                        type="text"
+                        id="itemCode"
+                        placeholder="Auto-generated (e.g. ITM0001)"
+                    >
+                </div>
+
+                <!-- ITEM NAME -->
+                <div class="form-group">
+                    <label>Item Name *</label>
+                    <input
+                        type="text"
+                        id="itemName"
+                        placeholder="e.g. Dell OptiPlex Desktop 7090"
+                        required
+                    >
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="itemCategory" required>
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+
+                <!-- UNIT -->
+                <div class="form-group">
+                    <label>Unit of Measurement (UOM) *</label>
+                    <select id="itemUnit" required>
+                        <option value="">Select Unit</option>
+                    </select>
+                </div>
+
+                <!-- PURCHASE PRICE -->
+                <div class="form-group">
+                    <label>Purchase Price (₹) *</label>
+                    <input
+                        type="number"
+                        id="itemPurchasePrice"
+                        step="0.01"
+                        min="0"
+                        placeholder="0.00"
+                        required
+                    >
+                </div>
+
+                <!-- TAX -->
+                <div class="form-group">
+                    <label>Tax (%) *</label>
+                    <input
+                        type="number"
+                        id="itemTax"
+                        step="0.01"
+                        min="0"
+                        placeholder="5.0"
+                        value="5.0"
+                        required
+                    >
+                </div>
+
+                <!-- STATUS -->
+                <div class="form-group">
+                    <label>Status *</label>
+                    <select id="itemStatus" required>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <!-- DESCRIPTION -->
+                <div class="form-group full">
+                    <label>Description / Technical Specifications</label>
+                    <textarea
+                        id="itemDescription"
+                        placeholder="Enter item description, specifications, warranty..."
+                    ></textarea>
+                </div>
+
+            </div>
+
+            <div class="modal-footer" style="margin: 24px -26px -26px -26px;">
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeItemModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                    id="saveItemBtn"
+                >
+                    Save Item
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- VIEW ITEM MODAL -->
+<div class="modal" id="viewItemModal">
+
+    <div class="modal-content" style="width: 680px;">
+
+        <div class="modal-header">
+            <div>
+                <h2 id="viewItemTitle">Item Details</h2>
+                <p id="viewItemCode" class="code-badge" style="margin-top: 5px;">-</p>
+            </div>
+            <button type="button" class="close-btn" onclick="closeViewModal()">×</button>
+        </div>
+
+        <div class="detail-box">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Item Code</span>
+                    <span class="detail-value" id="vCode">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Status</span>
+                    <span class="detail-value" id="vStatus">-</span>
+                </div>
+                <div class="detail-item full">
+                    <span class="detail-label">Item Name</span>
+                    <span class="detail-value" id="vName" style="font-size: 16px;">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Category</span>
+                    <span class="detail-value" id="vCategory">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Unit of Measure</span>
+                    <span class="detail-value" id="vUnit">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Standard Purchase Price</span>
+                    <span class="detail-value" id="vPrice" style="color: #2563eb;">-</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Tax Rate</span>
+                    <span class="detail-value" id="vTax">-</span>
+                </div>
+                <div class="detail-item full">
+                    <span class="detail-label">Description / Specifications</span>
+                    <span class="detail-value" id="vDescription" style="font-weight: 400; line-height: 1.5; color: #475569;">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button
+                type="button"
+                class="cancel-btn"
+                onclick="closeViewModal()"
+            >
+                Close
+            </button>
+            <button
+                type="button"
+                class="save-btn"
+                id="viewEditBtn"
+                onclick=""
+            >
+                ✏️ Edit Item
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST NOTIFICATION -->
+<div id="toast" class="toast" style="display:none;"></div>
+
+
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/app.js"></script>
+
+<script>
+    /* =====================================================
+       API ENDPOINTS & STATE
+    ===================================================== */
+    const ITEMS_API = "../api/items.php";
+    const CATEGORIES_API = "../api/item_categories.php";
+    const UNITS_API = "../api/units.php";
+
+    let items = [];
+    let categories = [];
+    let units = [];
+    let filteredItems = [];
+    let editingItemId = null;
+
+    // Sorting & Pagination
+    let currentSortField = "id";
+    let currentSortAsc = false;
+    let currentPage = 1;
+    const itemsPerPage = 8;
+
+    /* =====================================================
+       INITIALIZATION
+    ===================================================== */
+    document.addEventListener("DOMContentLoaded", async function () {
+        await Promise.all([
+            loadCategories(),
+            loadUnits(),
+            loadItems()
+        ]);
+
+        document.getElementById("searchInput").addEventListener("input", applyFilters);
+    });
+
+    /* =====================================================
+       LOAD CATEGORIES & UNITS
+    ===================================================== */
+    async function loadCategories() {
+        try {
+            const res = await apiRequest("item_categories.php");
+            categories = res.data || [];
+
+            const filterSel = document.getElementById("categoryFilter");
+            const modalSel = document.getElementById("itemCategory");
+
+            filterSel.innerHTML = '<option value="">All Categories</option>';
+            modalSel.innerHTML = '<option value="">Select Category</option>';
+
+            categories.forEach(c => {
+                if (c.status === "Active" || !c.status) {
+                    const opt1 = document.createElement("option");
+                    opt1.value = c.name;
+                    opt1.textContent = c.name;
+                    filterSel.appendChild(opt1);
+
+                    const opt2 = document.createElement("option");
+                    opt2.value = c.name;
+                    opt2.textContent = c.name;
+                    modalSel.appendChild(opt2);
+                }
+            });
+        } catch (err) {
+            console.error("Error loading categories:", err);
+        }
+    }
+
+    async function loadUnits() {
+        try {
+            const res = await apiRequest("units.php");
+            units = res.data || [];
+
+            const modalSel = document.getElementById("itemUnit");
+            modalSel.innerHTML = '<option value="">Select Unit</option>';
+
+            units.forEach(u => {
+                if (u.status === "Active" || !u.status) {
+                    const opt = document.createElement("option");
+                    opt.value = u.short_name || u.name;
+                    opt.textContent = `${u.name} (${u.short_name || u.name})`;
+                    modalSel.appendChild(opt);
+                }
+            });
+        } catch (err) {
+            console.error("Error loading units:", err);
+        }
+    }
+
+    /* =====================================================
+       LOAD ITEMS
+    ===================================================== */
+    async function loadItems() {
+        const tbody = document.getElementById("itemTableBody");
+        const count = document.getElementById("itemCount");
+
+        tbody.innerHTML = `<tr><td colspan="9" class="loading">Loading items...</td></tr>`;
+
+        try {
+            const res = await apiRequest("items.php");
+            items = res.data || [];
+            applyFilters();
+        } catch (err) {
+            console.error("Error loading items:", err);
+            count.textContent = "Unable to load items";
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="9" class="empty">
+                        ❌ Unable to load items: ${escapeHTML(err.message)}
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    /* =====================================================
+       FILTER, SORT & PAGINATE
+    ===================================================== */
+    function applyFilters() {
+        const search = document.getElementById("searchInput").value.trim().toLowerCase();
+        const cat = document.getElementById("categoryFilter").value;
+        const status = document.getElementById("statusFilter").value;
+
+        filteredItems = items.filter(item => {
+            const matchSearch = !search || (
+                String(item.code || "").toLowerCase().includes(search) ||
+                String(item.name || "").toLowerCase().includes(search) ||
+                String(item.description || "").toLowerCase().includes(search) ||
+                String(item.category || "").toLowerCase().includes(search) ||
+                String(item.unit || "").toLowerCase().includes(search)
+            );
+            const matchCat = !cat || (item.category === cat);
+            const matchStatus = !status || (String(item.status || "").toLowerCase() === status.toLowerCase());
+
+            return matchSearch && matchCat && matchStatus;
+        });
+
+        // Apply Sorting
+        filteredItems.sort((a, b) => {
+            let valA = a[currentSortField] ?? "";
+            let valB = b[currentSortField] ?? "";
+
+            if (typeof valA === "number" || currentSortField === "purchase_price" || currentSortField === "tax") {
+                valA = Number(valA || 0);
+                valB = Number(valB || 0);
+                return currentSortAsc ? valA - valB : valB - valA;
+            }
+
+            valA = String(valA).toLowerCase();
+            valB = String(valB).toLowerCase();
+            if (valA < valB) return currentSortAsc ? -1 : 1;
+            if (valA > valB) return currentSortAsc ? 1 : -1;
+            return 0;
+        });
+
+        currentPage = 1;
+        renderTable();
+    }
+
+    function sortTable(field) {
+        if (currentSortField === field) {
+            currentSortAsc = !currentSortAsc;
+        } else {
+            currentSortField = field;
+            currentSortAsc = true;
+        }
+
+        // Update sort indicators
+        const sortIcons = ["code", "name", "category", "purchase_price"];
+        sortIcons.forEach(f => {
+            const el = document.getElementById(`sort-${f}`);
+            if (el) {
+                if (f === currentSortField) {
+                    el.textContent = currentSortAsc ? "▲" : "▼";
+                    el.style.color = "#2563eb";
+                } else {
+                    el.textContent = "↕";
+                    el.style.color = "#94a3b8";
+                }
+            }
+        });
+
+        applyFilters();
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById("itemTableBody");
+        const count = document.getElementById("itemCount");
+        const total = filteredItems.length;
+
+        count.textContent = `${total} item${total === 1 ? "" : "s"} found`;
+
+        if (total === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="9" class="empty">
+                        No items found matching your criteria.
+                    </td>
+                </tr>
+            `;
+            document.getElementById("paginationContainer").style.display = "none";
+            return;
+        }
+
+        // Pagination slice
+        const totalPages = Math.ceil(total / itemsPerPage);
+        if (currentPage > totalPages) currentPage = totalPages;
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const pageItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
+
+        tbody.innerHTML = pageItems.map(item => {
+            const status = item.status || "Active";
+            const isAct = status.toLowerCase() === "active";
+            const statusClass = isAct ? "badge-completed" : "badge-cancelled";
+
+            return `
+                <tr>
+                    <td>
+                        <span class="code-badge">
+                            ${escapeHTML(item.code || "-")}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="item-name-cell">
+                            ${escapeHTML(item.name || "-")}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="desc-cell" title="${escapeHTML(item.description || '')}">
+                            ${escapeHTML(item.description || "-")}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="category-tag">
+                            🏷️ ${escapeHTML(item.category || "-")}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="uom-tag">
+                            ${escapeHTML(item.unit || "-")}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="price-text">
+                            ${formatMoney(item.purchase_price)}
+                        </span>
+                    </td>
+                    <td>
+                        ${escapeHTML(item.tax)}%
+                    </td>
+                    <td>
+                        <span class="badge ${statusClass}">
+                            ${escapeHTML(status)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button
+                                type="button"
+                                class="view-btn"
+                                title="View Details"
+                                onclick="viewItem(${item.id})"
+                            >
+                                👁️
+                            </button>
+                            <button
+                                type="button"
+                                class="edit-btn"
+                                title="Edit Item"
+                                onclick="editItem(${item.id})"
+                            >
+                                ✏️
+                            </button>
+                            <button
+                                type="button"
+                                class="delete-btn"
+                                title="Delete Item"
+                                onclick="deleteItem(${item.id})"
+                            >
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join("");
+
+        // Render pagination controls
+        renderPagination(total, totalPages, startIndex, pageItems.length);
+    }
+
+    function renderPagination(total, totalPages, startIndex, pageCount) {
+        const container = document.getElementById("paginationContainer");
+        const info = document.getElementById("paginationInfo");
+        const buttons = document.getElementById("paginationButtons");
+
+        if (total <= itemsPerPage) {
+            container.style.display = "none";
+            return;
+        }
+
+        container.style.display = "flex";
+        info.textContent = `Showing ${startIndex + 1} to ${startIndex + pageCount} of ${total} items`;
+
+        let btnHtml = `
+            <button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">
+                Prev
+            </button>
+        `;
+
+        for (let p = 1; p <= totalPages; p++) {
+            btnHtml += `
+                <button class="page-btn ${p === currentPage ? 'active' : ''}" onclick="changePage(${p})">
+                    ${p}
+                </button>
+            `;
+        }
+
+        btnHtml += `
+            <button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">
+                Next
+            </button>
+        `;
+
+        buttons.innerHTML = btnHtml;
+    }
+
+    function changePage(p) {
+        currentPage = p;
+        renderTable();
+    }
+
+    /* =====================================================
+       ADD / EDIT MODAL
+    ===================================================== */
+    function openItemModal() {
+        editingItemId = null;
+        document.getElementById("itemForm").reset();
+        document.getElementById("itemId").value = "";
+        document.getElementById("modalTitle").textContent = "Add New Item";
+        document.getElementById("modalSubtitle").textContent = "Fill in item details, classification, and purchasing pricing";
+        document.getElementById("itemCode").value = "";
+        document.getElementById("itemTax").value = "5.0";
+        document.getElementById("itemStatus").value = "Active";
+
+        document.getElementById("itemModal").classList.add("show");
+        setTimeout(() => {
+            document.getElementById("itemName").focus();
+        }, 100);
+    }
+
+    function editItem(id) {
+        const item = items.find(it => String(it.id) === String(id));
+        if (!item) {
+            showToast("Item not found", true);
+            return;
+        }
+
+        editingItemId = item.id;
+        document.getElementById("modalTitle").textContent = "Edit Item";
+        document.getElementById("modalSubtitle").textContent = "Update item details and purchasing parameters";
+
+        document.getElementById("itemId").value = item.id;
+        document.getElementById("itemCode").value = item.code || "";
+        document.getElementById("itemName").value = item.name || "";
+        document.getElementById("itemCategory").value = item.category || "";
+        document.getElementById("itemUnit").value = item.unit || "";
+        document.getElementById("itemPurchasePrice").value = item.purchase_price || "";
+        document.getElementById("itemTax").value = item.tax || "5.0";
+        document.getElementById("itemStatus").value = item.status || "Active";
+        document.getElementById("itemDescription").value = item.description || "";
+
+        closeViewModal();
+        document.getElementById("itemModal").classList.add("show");
+    }
+
+    function closeItemModal() {
+        document.getElementById("itemModal").classList.remove("show");
+        editingItemId = null;
+    }
+
+    /* =====================================================
+       VIEW MODAL
+    ===================================================== */
+    function viewItem(id) {
+        const item = items.find(it => String(it.id) === String(id));
+        if (!item) {
+            showToast("Item not found", true);
+            return;
+        }
+
+        document.getElementById("viewItemTitle").textContent = item.name;
+        document.getElementById("viewItemCode").textContent = item.code || "-";
+        document.getElementById("vCode").textContent = item.code || "-";
+        document.getElementById("vStatus").innerHTML = statusBadge(item.status);
+        document.getElementById("vName").textContent = item.name || "-";
+        document.getElementById("vCategory").textContent = item.category || "-";
+        document.getElementById("vUnit").textContent = item.unit || "-";
+        document.getElementById("vPrice").textContent = formatMoney(item.purchase_price);
+        document.getElementById("vTax").textContent = `${item.tax || 0}%`;
+        document.getElementById("vDescription").textContent = item.description || "No description provided.";
+
+        document.getElementById("viewEditBtn").onclick = () => editItem(item.id);
+
+        document.getElementById("viewItemModal").classList.add("show");
+    }
+
+    function closeViewModal() {
+        document.getElementById("viewItemModal").classList.remove("show");
+    }
+
+    /* =====================================================
+       SAVE ITEM
+    ===================================================== */
+    async function saveItem() {
+        const name = document.getElementById("itemName").value.trim();
+        const code = document.getElementById("itemCode").value.trim();
+        const category = document.getElementById("itemCategory").value;
+        const unit = document.getElementById("itemUnit").value;
+        const price = parseFloat(document.getElementById("itemPurchasePrice").value);
+        const tax = parseFloat(document.getElementById("itemTax").value);
+        const status = document.getElementById("itemStatus").value;
+        const description = document.getElementById("itemDescription").value.trim();
+
+        if (!name) {
+            showToast("Item name is required.", true);
+            return;
+        }
+        if (!category) {
+            showToast("Please select a category.", true);
+            return;
+        }
+        if (!unit) {
+            showToast("Please select a unit of measurement.", true);
+            return;
+        }
+        if (isNaN(price) || price < 0) {
+            showToast("Purchase price must be a valid positive number.", true);
+            return;
+        }
+        if (isNaN(tax) || tax < 0) {
+            showToast("Tax rate must be a valid positive number.", true);
+            return;
+        }
+
+        const payload = {
+            id: editingItemId || undefined,
+            code: code || undefined,
+            name: name,
+            category: category,
+            unit: unit,
+            purchase_price: price,
+            tax: tax,
+            status: status,
+            description: description
+        };
+
+        const btn = document.getElementById("saveItemBtn");
+        btn.disabled = true;
+        btn.textContent = editingItemId ? "Updating..." : "Saving...";
+
+        try {
+            const method = editingItemId ? "PUT" : "POST";
+            await apiRequest("items.php", {
+                method: method,
+                body: JSON.stringify(payload)
+            });
+
+            showToast(editingItemId ? "Item updated successfully!" : "Item created successfully!");
+            closeItemModal();
+            await loadItems();
+        } catch (err) {
+            showToast(err.message || "Failed to save item.", true);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = editingItemId ? "Update Item" : "Save Item";
+        }
+    }
+
+    /* =====================================================
+       DELETE ITEM
+    ===================================================== */
+    async function deleteItem(id) {
+        const item = items.find(it => String(it.id) === String(id));
+        if (!item) return;
+
+        if (!confirm(`Are you sure you want to delete item "${item.name}" (${item.code})?`)) {
+            return;
+        }
+
+        try {
+            await apiRequest(`items.php?id=${id}`, { method: "DELETE" });
+            showToast("Item deleted successfully!");
+            await loadItems();
+        } catch (err) {
+            showToast(err.message || "Failed to delete item.", true);
+        }
+    }
+
+    // Dismiss modals
+    document.getElementById("itemModal").addEventListener("click", function(e) {
+        if (e.target === this) closeItemModal();
+    });
+    document.getElementById("viewItemModal").addEventListener("click", function(e) {
+        if (e.target === this) closeViewModal();
+    });
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+            closeItemModal();
+            closeViewModal();
+        }
+    });
+</script>
+
+</body>
+</html>
