@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProcureX - Login</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body class="auth-page">
+
+    <div class="auth-card">
+        <div class="auth-brand">
+            <div class="brand-icon">P</div>
+            <div class="brand-text">
+                <h2>ProcureX</h2>
+                <p>Procurement Management</p>
+            </div>
+        </div>
+
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Sign in to your procurement portal</p>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <input type="email" id="email" class="form-control" placeholder="admin@example.com" value="admin@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="••••••••" value="admin123" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 8px;">
+                Sign In
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="register.html">Register here</a></p>
+        </div>
+    </div>
+
+    <script src="sidebar.js"></script>
+    <script>
+        const API_URL = 'https://YOUR_BACKEND_URL/api.php';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await callApi('login', 'POST', { email, password });
+                
+                if (response.success && response.data) {
+                    localStorage.setItem('procurex_token', response.data.token);
+                    localStorage.setItem('procurex_user', JSON.stringify(response.data.user));
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('user', JSON.stringify(response.data.user));
+                    
+                    showToast('Login successful! Redirecting...', false);
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 500);
+                }
+            } catch (error) {
+                // Handled in callApi
+            }
+        });
+    </script>
+</body>
+</html>

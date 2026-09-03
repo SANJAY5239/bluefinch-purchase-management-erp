@@ -110,5 +110,19 @@
         "group": "General",
         "status": "Active",
         "created_at": "2026-09-02 11:42:40"
+    },
+    {
+        "id": 13,
+        "code": "hgfftyfh",
+        "name": "hfgyugyuj",
+        "contact_person": "",
+        "phone": "",
+        "email": "",
+        "address": "",
+        "tax_number": "",
+        "payment_terms": "30 Days",
+        "group": "General",
+        "status": "Active",
+        "created_at": "2026-09-02 17:55:36"
     }
 ]

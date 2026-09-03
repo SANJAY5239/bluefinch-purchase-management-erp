@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProcureX - Supplier Master</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">P</div>
+            <div class="brand-text">
+                <h2>ProcureX</h2>
+                <p>Procurement ERP</p>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Main Navigation</div>
+            <a href="home.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="purchase-orders.html" class="nav-item">
+                <span class="nav-icon">📜</span>
+                <span>Purchase Orders</span>
+            </a>
+
+            <div class="nav-section-title">Masters</div>
+            <a href="suppliers.html" class="nav-item active">
+                <span class="nav-icon">🏢</span>
+                <span>Suppliers</span>
+            </a>
+            <a href="items.html" class="nav-item">
+                <span class="nav-icon">📦</span>
+                <span>Items Catalog</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="page-title-text">Supplier Master Management</div>
+            <div class="user-profile">
+                <div class="user-avatar" id="headerUserAvatar">A</div>
+                <div class="user-info">
+                    <div class="user-name" id="headerUserName">Administrator</div>
+                    <div class="user-role">Procurement Manager</div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <div class="page-container">
+            <div class="page-header-actions">
+                <div class="header-meta">
+                    <h1>Suppliers</h1>
+                    <p>Manage vendor directory, contact profiles, and GST records</p>
+                </div>
+                <button class="btn btn-primary" id="openSupplierModalBtn">
+                    + Add New Supplier
+                </button>
+            </div>
+
+            <!-- Suppliers Table -->
+            <div class="card-table-wrapper">
+                <div class="table-header">
+                    <h3 class="table-title">Registered Vendor Directory</h3>
+                </div>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Supplier Name</th>
+                            <th>Contact Person</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>City</th>
+                            <th>GSTIN</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="suppliersTableBody">
+                        <tr>
+                            <td colspan="8" style="text-align: center; color: var(--gray-400); padding: 30px;">
+                                Loading suppliers list...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Add Supplier Modal -->
+<div class="modal-overlay" id="supplierModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 class="modal-title">Add New Supplier</h3>
+            <button class="modal-close" id="closeSupplierModalBtn">&times;</button>
+        </div>
+
+        <form id="createSupplierForm">
+            <div class="form-group">
+                <label class="form-label" for="supName">Company Name</label>
+                <input type="text" id="supName" class="form-control" placeholder="Acme Logistics Ltd" required>
+            </div>
+
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="supContact">Contact Person</label>
+                    <input type="text" id="supContact" class="form-control" placeholder="Robert Fox" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="supEmail">Email Address</label>
+                    <input type="email" id="supEmail" class="form-control" placeholder="vendor@domain.com" required>
+                </div>
+            </div>
+
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="supPhone">Phone Number</label>
+                    <input type="text" id="supPhone" class="form-control" placeholder="+91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="supCity">City</label>
+                    <input type="text" id="supCity" class="form-control" placeholder="Mumbai" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="supGstin">GSTIN Number</label>
+                <input type="text" id="supGstin" class="form-control" placeholder="27AAACA12341Z5" required>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button type="button" class="btn btn-secondary" id="cancelSupplierModalBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Supplier</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="sidebar.js"></script>
+<script>
+    const API = 'https://YOUR_BACKEND_URL/api.php';
+
+    async function loadSuppliers() {
+        try {
+            const res = await callApi('get_suppliers');
+            if (res.success && Array.isArray(res.data)) {
+                renderSuppliersTable(res.data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function renderSuppliersTable(suppliers) {
+        const tbody = document.getElementById('suppliersTableBody');
+        if (suppliers.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; color: var(--gray-600); padding: 24px;">
+                        No suppliers registered yet. Click "+ Add New Supplier" to create one.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = suppliers.map(s => `
+            <tr>
+                <td><strong>${s.name}</strong></td>
+                <td>${s.contact_person}</td>
+                <td>${s.email}</td>
+                <td>${s.phone || 'N/A'}</td>
+                <td>${s.city || 'N/A'}</td>
+                <td><code>${s.gstin || 'N/A'}</code></td>
+                <td><span class="badge badge-active">${s.status || 'Active'}</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-danger btn-sm" onclick="deleteSupplier(${s.id})">🗑️ Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async function deleteSupplier(id) {
+        if (!confirm('Are you sure you want to delete this supplier?')) return;
+        try {
+            const res = await callApi('delete_supplier', 'POST', { id });
+            if (res.success) {
+                showToast('Supplier deleted successfully.');
+                loadSuppliers();
+            }
+        } catch (error) {
+            // Handled
+        }
+    }
+
+    // Modal Control
+    const modal = document.getElementById('supplierModal');
+    document.getElementById('openSupplierModalBtn').addEventListener('click', () => modal.classList.add('active'));
+    document.getElementById('closeSupplierModalBtn').addEventListener('click', () => modal.classList.remove('active'));
+    document.getElementById('cancelSupplierModalBtn').addEventListener('click', () => modal.classList.remove('active'));
+
+    document.getElementById('createSupplierForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById('supName').value.trim();
+        const contact_person = document.getElementById('supContact').value.trim();
+        const email = document.getElementById('supEmail').value.trim();
+        const phone = document.getElementById('supPhone').value.trim();
+        const city = document.getElementById('supCity').value.trim();
+        const gstin = document.getElementById('supGstin').value.trim();
+
+        try {
+            const res = await callApi('create_supplier', 'POST', {
+                name, contact_person, email, phone, city, gstin, status: 'Active'
+            });
+
+            if (res.success) {
+                showToast('Supplier added successfully!');
+                modal.classList.remove('active');
+                document.getElementById('createSupplierForm').reset();
+                loadSuppliers();
+            }
+        } catch (error) {
+            // Handled
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', loadSuppliers);
+</script>
+</body>
+</html>

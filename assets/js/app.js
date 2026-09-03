@@ -114,11 +114,60 @@ function initSidebarDropdowns(){
 
 }
 
+function setTheme(theme){
+
+    const isDark = theme === "dark";
+
+    document.documentElement.classList.toggle("dark-theme", isDark);
+    localStorage.setItem("bluefinch_theme", isDark ? "dark" : "light");
+
+    const themeToggle = document.getElementById("themeToggle");
+
+    if(themeToggle){
+        themeToggle.setAttribute("aria-pressed", String(isDark));
+        themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+        themeToggle.innerHTML = isDark
+            ? '<span aria-hidden="true">☀</span><span class="theme-toggle-label">Light mode</span>'
+            : '<span aria-hidden="true">☾</span><span class="theme-toggle-label">Dark mode</span>';
+    }
+
+}
+
+function initThemeToggle(){
+
+    const topbar = document.querySelector(".topbar");
+
+    if(!topbar || document.getElementById("themeToggle")) return;
+
+    const userArea = topbar.querySelector(".user-area");
+    const themeToggle = document.createElement("button");
+
+    themeToggle.type = "button";
+    themeToggle.id = "themeToggle";
+    themeToggle.className = "theme-toggle";
+
+    if(userArea){
+        userArea.prepend(themeToggle);
+    }else{
+        topbar.append(themeToggle);
+    }
+
+    const savedTheme = localStorage.getItem("bluefinch_theme");
+    setTheme(savedTheme === "dark" ? "dark" : "light");
+
+    themeToggle.addEventListener("click", function(){
+        setTheme(document.documentElement.classList.contains("dark-theme") ? "light" : "dark");
+    });
+
+}
+
 document.addEventListener("DOMContentLoaded", function(){
 
     requireLogin();
 
     initSidebarDropdowns();
+
+    initThemeToggle();
 
     const logoutButton = document.getElementById("logoutBtn");
 

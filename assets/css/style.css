@@ -2817,4 +2817,145 @@ th.sortable:hover {
     font-size: 10px;
     color: #94a3b8;
 }
-
+
+/* =========================================================
+   LIGHT / DARK MODE
+========================================================= */
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 10px;
+    border: 1px solid #dbe4ef;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #334155;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.theme-toggle:hover {
+    background: #eaf1fb;
+    border-color: #93c5fd;
+}
+
+.dark-theme {
+    color-scheme: dark;
+}
+
+.dark-theme body,
+.dark-theme .main {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+.dark-theme .main,
+.dark-theme .content {
+    background-image: radial-gradient(circle at 90% 5%, rgba(56, 189, 248, .12), transparent 24%);
+}
+
+.dark-theme .topbar {
+    background: rgba(15, 23, 42, .95);
+    border-color: #26354d;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, .2);
+}
+
+.dark-theme .topbar h2,
+.dark-theme .page-header h1,
+.dark-theme .card-title,
+.dark-theme .section-title,
+.dark-theme .stat-number,
+.dark-theme .summary-row strong,
+.dark-theme .detail-value,
+.dark-theme .group-item-title,
+.dark-theme .group-stat-card .stat-val {
+    color: #f8fafc;
+}
+
+.dark-theme .user-area,
+.dark-theme .page-header p,
+.dark-theme .stat-title,
+.dark-theme .summary-row,
+.dark-theme .detail-label,
+.dark-theme .group-item-suppliers,
+.dark-theme .group-stat-card .stat-lbl {
+    color: #aab9cf;
+}
+
+.dark-theme .card,
+.dark-theme .table-card,
+.dark-theme .form-card,
+.dark-theme .modal-content,
+.dark-theme .group-item-card,
+.dark-theme .group-stat-card,
+.dark-theme .detail-grid,
+.dark-theme .erp-pagination {
+    background: #172238 !important;
+    border-color: #2b3a53 !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .18) !important;
+}
+
+.dark-theme th {
+    background: #1d2a42 !important;
+    color: #aab9cf !important;
+}
+
+.dark-theme td,
+.dark-theme .section-title,
+.dark-theme .summary-row,
+.dark-theme .form-actions,
+.dark-theme .table-toolbar,
+.dark-theme .group-item-actions {
+    border-color: #2b3a53;
+}
+
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea,
+.dark-theme .group-filter-select,
+.dark-theme .page-btn {
+    background: #101a2d;
+    color: #e2e8f0;
+    border-color: #3a4a65;
+}
+
+.dark-theme input::placeholder,
+.dark-theme textarea::placeholder {
+    color: #74849d;
+}
+
+.dark-theme .btn-secondary,
+.dark-theme .theme-toggle {
+    background: #24334b !important;
+    color: #d8e3f1 !important;
+    border-color: #3b4e6d !important;
+}
+
+.dark-theme .btn-secondary:hover,
+.dark-theme .theme-toggle:hover,
+.dark-theme .page-btn:hover:not(:disabled) {
+    background: #314563 !important;
+}
+
+.dark-theme .theme-toggle {
+    border-color: #456389 !important;
+}
+
+.dark-theme .sidebar {
+    border-color: rgba(96, 165, 250, .22);
+}
+
+@media (max-width: 650px) {
+    .theme-toggle-label {
+        display: none;
+    }
+
+    .theme-toggle {
+        padding: 8px 9px;
+    }
+}
+

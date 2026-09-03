@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProcureX - Purchase Orders</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">P</div>
+            <div class="brand-text">
+                <h2>ProcureX</h2>
+                <p>Procurement ERP</p>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Main Navigation</div>
+            <a href="home.html" class="nav-item">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="purchase-orders.html" class="nav-item active">
+                <span class="nav-icon">📜</span>
+                <span>Purchase Orders</span>
+            </a>
+
+            <div class="nav-section-title">Masters</div>
+            <a href="suppliers.html" class="nav-item">
+                <span class="nav-icon">🏢</span>
+                <span>Suppliers</span>
+            </a>
+            <a href="items.html" class="nav-item">
+                <span class="nav-icon">📦</span>
+                <span>Items Catalog</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="page-title-text">Purchase Order Management</div>
+            <div class="user-profile">
+                <div class="user-avatar" id="headerUserAvatar">A</div>
+                <div class="user-info">
+                    <div class="user-name" id="headerUserName">Administrator</div>
+                    <div class="user-role">Procurement Manager</div>
+                </div>
+                <button class="btn-logout" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <div class="page-container">
+            <div class="page-header-actions">
+                <div class="header-meta">
+                    <h1>Purchase Orders</h1>
+                    <p>Manage, track, approve, and generate PO documents</p>
+                </div>
+                <button class="btn btn-primary" id="openAddModalBtn">
+                    + Create Purchase Order
+                </button>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="card-table-wrapper">
+                <div class="table-header">
+                    <h3 class="table-title">All Purchase Orders</h3>
+                </div>
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>PO Number</th>
+                            <th>Supplier</th>
+                            <th>Item Name</th>
+                            <th>Qty</th>
+                            <th>Unit Price</th>
+                            <th>GST %</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Delivery Date</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr>
+                            <td colspan="10" style="text-align: center; color: var(--gray-400); padding: 30px;">
+                                Loading purchase orders...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Create Order Modal -->
+<div class="modal-overlay" id="orderModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 class="modal-title">Create Purchase Order</h3>
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+        </div>
+
+        <form id="createOrderForm">
+            <div class="form-group">
+                <label class="form-label" for="poSupplier">Select Supplier</label>
+                <select id="poSupplier" class="form-control" required>
+                    <option value="">-- Choose Supplier --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="poItem">Select Item</label>
+                <select id="poItem" class="form-control" required>
+                    <option value="">-- Choose Item --</option>
+                </select>
+            </div>
+
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="poQty">Quantity</label>
+                    <input type="number" id="poQty" class="form-control" min="1" value="10" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="poPrice">Unit Price (₹)</label>
+                    <input type="number" id="poPrice" class="form-control" step="0.01" value="1000.00" required>
+                </div>
+            </div>
+
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="poGst">GST Percent (%)</label>
+                    <input type="number" id="poGst" class="form-control" step="0.01" value="18.00" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="poTotal">Calculated Total (₹)</label>
+                    <input type="text" id="poTotal" class="form-control" readonly style="background-color: var(--gray-100); font-weight: 700;">
+                </div>
+            </div>
+
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label class="form-label" for="poDate">Delivery Date</label>
+                    <input type="date" id="poDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="poTerms">Payment Terms</label>
+                    <input type="text" id="poTerms" class="form-control" value="Net 30 Days" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="poNotes">Notes / Specifications</label>
+                <textarea id="poNotes" class="form-control" rows="2" placeholder="Optional purchase instructions..."></textarea>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create Order</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="sidebar.js"></script>
+<script>
+    const API = 'https://YOUR_RAILWAY_BACKEND_URL/api.php';
+
+    let suppliersList = [];
+    let itemsList = [];
+
+    async function loadOrders() {
+        try {
+            const res = await callApi('get_orders');
+            if (res.success && Array.isArray(res.data)) {
+                renderOrdersTable(res.data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function renderOrdersTable(orders) {
+        const tbody = document.getElementById('ordersTableBody');
+        if (orders.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="10" style="text-align: center; color: var(--gray-600); padding: 24px;">
+                        No purchase orders found. Click "+ Create Purchase Order" to add one.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = orders.map(order => {
+            return `
+                <tr>
+                    <td><strong>${order.po_number}</strong></td>
+                    <td>${order.supplier_name || 'N/A'}</td>
+                    <td>${order.item_name || 'N/A'}</td>
+                    <td>${order.quantity}</td>
+                    <td>${formatMoney(order.unit_price)}</td>
+                    <td>${order.gst_percent}%</td>
+                    <td><strong>${formatMoney(order.total_amount)}</strong></td>
+                    <td>
+                        <select class="form-control btn-sm" style="width: 110px; padding: 4px;" onchange="updateOrderStatus(${order.id}, this.value)">
+                            <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Approved" ${order.status === 'Approved' ? 'selected' : ''}>Approved</option>
+                            <option value="Rejected" ${order.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
+                        </select>
+                    </td>
+                    <td>${order.delivery_date || 'N/A'}</td>
+                    <td style="text-align: right; white-space: nowrap;">
+                        <a href="purchase-order-pdf.html?id=${order.id}" target="_blank" class="btn btn-secondary btn-sm" title="View PDF / Print">🖨️ PDF</a>
+                        <button class="btn btn-danger btn-sm" onclick="deleteOrder(${order.id})">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    async function updateOrderStatus(id, status) {
+        try {
+            const res = await callApi('update_order_status', 'POST', { id, status });
+            if (res.success) {
+                showToast(`Order status updated to ${status}`);
+                loadOrders();
+            }
+        } catch (error) {
+            // Handled
+        }
+    }
+
+    async function deleteOrder(id) {
+        if (!confirm('Are you sure you want to delete this purchase order?')) return;
+        try {
+            const res = await callApi('delete_order', 'POST', { id });
+            if (res.success) {
+                showToast('Purchase order deleted.');
+                loadOrders();
+            }
+        } catch (error) {
+            // Handled
+        }
+    }
+
+    async function loadSelectOptions() {
+        try {
+            const supRes = await callApi('get_suppliers');
+            if (supRes.success) {
+                suppliersList = supRes.data || [];
+                const supSelect = document.getElementById('poSupplier');
+                supSelect.innerHTML = '<option value="">-- Choose Supplier --</option>' + 
+                    suppliersList.map(s => `<option value="${s.id}">${s.name} (${s.city})</option>`).join('');
+            }
+
+            const itemRes = await callApi('get_items');
+            if (itemRes.success) {
+                itemsList = itemRes.data || [];
+                const itemSelect = document.getElementById('poItem');
+                itemSelect.innerHTML = '<option value="">-- Choose Item --</option>' + 
+                    itemsList.map(i => `<option value="${i.id}">${i.item_code} - ${i.name} (₹${i.unit_price})</option>`).join('');
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function calculateTotal() {
+        const qty = parseFloat(document.getElementById('poQty').value) || 0;
+        const price = parseFloat(document.getElementById('poPrice').value) || 0;
+        const gst = parseFloat(document.getElementById('poGst').value) || 0;
+
+        const subtotal = qty * price;
+        const gstAmount = subtotal * (gst / 100);
+        const total = subtotal + gstAmount;
+
+        document.getElementById('poTotal').value = formatMoney(total);
+    }
+
+    document.getElementById('poItem').addEventListener('change', (e) => {
+        const itemId = parseInt(e.target.value);
+        const item = itemsList.find(i => i.id === itemId);
+        if (item) {
+            document.getElementById('poPrice').value = item.unit_price;
+            calculateTotal();
+        }
+    });
+
+    ['poQty', 'poPrice', 'poGst'].forEach(id => {
+        document.getElementById(id).addEventListener('input', calculateTotal);
+    });
+
+    // Modal toggling
+    const modal = document.getElementById('orderModal');
+    document.getElementById('openAddModalBtn').addEventListener('click', () => {
+        const futureDate = new Date();
+        futureDate.setDate(futureDate.getDate() + 7);
+        document.getElementById('poDate').value = futureDate.toISOString().split('T')[0];
+        
+        loadSelectOptions();
+        calculateTotal();
+        modal.classList.add('active');
+    });
+
+    document.getElementById('closeModalBtn').addEventListener('click', () => modal.classList.remove('active'));
+    document.getElementById('cancelModalBtn').addEventListener('click', () => modal.classList.remove('active'));
+
+    document.getElementById('createOrderForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const supplier_id = document.getElementById('poSupplier').value;
+        const item_id = document.getElementById('poItem').value;
+        const quantity = document.getElementById('poQty').value;
+        const unit_price = document.getElementById('poPrice').value;
+        const gst_percent = document.getElementById('poGst').value;
+        const delivery_date = document.getElementById('poDate').value;
+        const payment_terms = document.getElementById('poTerms').value.trim();
+        const notes = document.getElementById('poNotes').value.trim();
+
+        try {
+            const res = await callApi('create_order', 'POST', {
+                supplier_id, item_id, quantity, unit_price, gst_percent, delivery_date, payment_terms, notes
+            });
+
+            if (res.success) {
+                showToast('Purchase Order created successfully!');
+                modal.classList.remove('active');
+                loadOrders();
+            }
+        } catch (error) {
+            // Handled
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', loadOrders);
+</script>
+</body>
+</html>
