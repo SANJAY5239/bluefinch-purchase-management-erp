@@ -18,14 +18,16 @@
         "id": 2,
         "code": "SUP0002",
         "name": "Tech Source India",
-        "group": "Hardware & IT",
         "contact_person": "Rahul Menon",
         "phone": "9847012345",
         "email": "rahul@techsource.com",
         "address": "Ernakulam, Kerala",
         "tax_number": "32XYZDE5678G1Z2",
-        "payment_terms": "60 Days",
-        "status": "Active"
+        "payment_terms": "15 Days",
+        "group": "Hardware & IT",
+        "status": "Active",
+        "created_at": "2026-09-03 07:44:20",
+        "updated_at": "2026-09-03 07:44:20"
     },
     {
         "id": 3,

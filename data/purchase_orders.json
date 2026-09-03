@@ -131,5 +131,95 @@
         "po_number": "PO0006",
         "created_by": "Admin",
         "created_at": "2026-08-25 12:26:47"
+    },
+    {
+        "id": "7",
+        "po_date": "2026-09-03",
+        "supplier_id": 1,
+        "supplier_name": "ABC Office Supplies",
+        "expected_delivery_date": "2000-04-04",
+        "reference_number": "REF-1001",
+        "payment_terms": "60 Days",
+        "delivery_location": "Kochi Office",
+        "notes": "uyggyugyuyugyuyugyug",
+        "items": [
+            {
+                "item_id": 1,
+                "item_code": "ITM0001",
+                "description": "Intel Core i7 11th Gen, 16GB DDR4 RAM, 512GB NVMe SSD, Windows 11 Pro",
+                "quantity": 1,
+                "unit": "PCS",
+                "unit_price": 450,
+                "discount": 5,
+                "tax": 5,
+                "line_total": 448.875
+            },
+            {
+                "item_id": 2,
+                "item_code": "ITM0002",
+                "description": "Multifunction wireless monochrome laser printer with duplex scanning",
+                "quantity": 1,
+                "unit": "PCS",
+                "unit_price": 280,
+                "discount": 0,
+                "tax": 5,
+                "line_total": 294
+            },
+            {
+                "item_id": 3,
+                "item_code": "ITM0003",
+                "description": "Breathable mesh back with 3D adjustable armrests and lumbar support",
+                "quantity": 1,
+                "unit": "PCS",
+                "unit_price": 120,
+                "discount": 0,
+                "tax": 5,
+                "line_total": 126
+            }
+        ],
+        "subtotal": 850,
+        "total_discount": 22.5,
+        "total_tax": 41.375,
+        "additional_charges": 0,
+        "grand_total": 868.875,
+        "status": "Pending",
+        "po_number": "PO0007",
+        "created_by": "Admin",
+        "created_at": "2026-09-03 08:20:10",
+        "updated_at": "2026-09-03 08:21:32"
+    },
+    {
+        "id": "8",
+        "po_date": "2026-09-03",
+        "supplier_id": 10,
+        "supplier_name": "Tax Address Test",
+        "expected_delivery_date": "2000-06-06",
+        "reference_number": "REF-1001",
+        "payment_terms": "60 Days",
+        "delivery_location": "Kochi Office",
+        "notes": "ytyytgygy",
+        "items": [
+            {
+                "item_id": 5,
+                "item_code": "IT01",
+                "description": "FHGFGYYYT",
+                "quantity": 5,
+                "unit": "Pcs",
+                "unit_price": 90000,
+                "discount": 5,
+                "tax": 2,
+                "line_total": 436050
+            }
+        ],
+        "subtotal": 450000,
+        "total_discount": 22500,
+        "total_tax": 8550,
+        "additional_charges": 0,
+        "grand_total": 436050,
+        "status": "Pending",
+        "po_number": "PO0008",
+        "created_by": "Admin",
+        "created_at": "2026-09-03 08:29:41",
+        "updated_at": "2026-09-03 08:30:23"
     }
 ]
