@@ -3,342 +3,534 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Purchase Order PDF Preview - ProcureX ERP</title>
+<title>Purchase Order Preview - BlueSun International</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-:root {
-  --p: #1565C0; /* Primary Deep Blue */
-  --p-dark: #0D47A1; /* Dark Navy Blue */
-  --p-med: #1E88E5; /* Medium Blue */
-  --p-light: #E3F2FD; /* Light Blue Tint */
-  --p-border: #BBDEFB; /* Soft Blue Border */
-  --g: #F5A623; /* Gold accent */
-  --text-dark: #263238;
-  --text-label: #1565C0;
-}
-
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  background: #ECEFF1;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  color: var(--text-dark);
+  background: #EBF1F6;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1E293B;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ─── STICKY TOOLBAR ─── */
+/* ─── STICKY NAVBAR ─── */
 .toolbar {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: linear-gradient(135deg, #0D47A1, #1565C0);
-  padding: 10px 3%;
+  background: #111622;
+  padding: 10px 4%;
   display: flex;
-  gap: 8px;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  gap: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
-.toolbar button, .toolbar a {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 5px;
-  color: #ffffff;
-  padding: 7px 12px;
+.toolbar a, .toolbar button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #FFFFFF;
+  padding: 7px 14px;
   text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  transition: background 0.2s ease;
 }
-.toolbar button:hover, .toolbar a:hover {
-  background: #E3F2FD;
-  color: #1565C0;
-  border-color: #BBDEFB;
+.toolbar a:hover, .toolbar button:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
-.toolbar .gold {
-  background: #F5A623;
-  color: #0D47A1;
-  border-color: #F5A623;
+.toolbar .tb-btn-white {
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #FFFFFF;
+  border-radius: 20px;
+  padding: 7px 18px;
   font-weight: 700;
 }
-.toolbar .gold:hover {
-  background: #FFB74D;
-  color: #0D47A1;
-}
-.tb-po-title {
-  color: #FFFFFF;
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0 8px;
-}
-.tb-verified-badge {
-  background: #2E7D32;
-  color: #FFFFFF;
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.toolbar .tb-btn-white:hover {
+  background: #F1F5F9;
+  color: #0F172A;
 }
 .push { margin-left: auto; }
 
-/* ─── A4 PAPER DOCUMENT ─── */
-.paper {
+/* ─── DOCUMENT CONTAINER ─── */
+.pdf-container {
+  width: 210mm;
+  margin: 24px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.paper-page {
   position: relative;
   width: 210mm;
   min-height: 297mm;
-  margin: 20px auto;
-  padding: 12mm 14mm;
   background: #FFFFFF;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-  border-top: 4px solid #1565C0;
-  border-left: 1px solid #BBDEFB;
-  border-right: 1px solid #BBDEFB;
-  border-bottom: 1px solid #BBDEFB;
-  font-size: 11px;
-  line-height: 1.4;
-  overflow: hidden;
-}
-.paper:focus { outline: 2px solid #1565C0; }
-
-/* Corner Marks */
-.corner-mark {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  pointer-events: none;
-}
-.corner-tl { top: 6px; left: 6px; border-top: 2px solid #1565C0; border-left: 2px solid #1565C0; }
-.corner-tr { top: 6px; right: 6px; border-top: 2px solid #1565C0; border-right: 2px solid #1565C0; }
-.corner-bl { bottom: 6px; left: 6px; border-bottom: 2px solid #1565C0; border-left: 2px solid #1565C0; }
-.corner-br { bottom: 6px; right: 6px; border-bottom: 2px solid #1565C0; border-right: 2px solid #1565C0; }
-
-/* Watermark */
-.watermark {
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-35deg);
-  font-size: 72px;
-  font-weight: 900;
-  color: #1565C0;
-  opacity: 0.04;
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
+  padding: 16mm 18mm;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
-/* ─── DOCUMENT HEADER ─── */
-.head {
+/* ─── HEADER AREA ─── */
+.doc-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  position: relative;
-  z-index: 1;
+  margin-bottom: 8px;
 }
-.brand {
+.brand-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-logo-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+.brand-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+.brand-main-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0072CE;
+  line-height: 1.1;
+}
+.brand-sub-title {
+  font-size: 14px;
+  color: #475569;
+  font-weight: 500;
+}
+
+.contact-info-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  font-size: 11px;
+  color: #475569;
+}
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.contact-icon {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #0072CE;
+  color: #FFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  flex-shrink: 0;
+}
+
+.head-accent-bar {
+  display: flex;
+  height: 4px;
+  width: 100%;
+  margin: 10px 0 16px 0;
+}
+.head-accent-blue {
+  width: 75%;
+  background: #0072CE;
+}
+.head-accent-dark {
+  width: 25%;
+  background: #334155;
+}
+
+/* ─── PAGE 1 TITLE & METADATA ─── */
+.po-main-heading {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #0F172A;
+  margin: 4px 0 6px 0;
+}
+.po-meta-strip {
+  display: flex;
+  justify-content: space-around;
+  font-size: 11px;
+  color: #64748B;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.po-meta-strip strong {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+/* ─── SUPPLIER & BUYER GRID ─── */
+.party-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.party-box {
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 14px;
+  background: #FFFFFF;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.party-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.party-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 4px;
+}
+.party-address {
+  color: #64748B;
+  margin-bottom: 8px;
+}
+.party-detail-row {
+  color: #475569;
+  margin: 2px 0;
+}
+.party-detail-row span {
+  color: #94A3B8;
+  font-size: 10px;
+  font-weight: 600;
+}
+.party-detail-row strong {
+  color: #1E293B;
+}
+
+/* ─── 4-COLUMN INFO STRIP ─── */
+.info-bar-4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+.info-col {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
-.brand-logo {
-  width: 130px;
-  height: auto;
-  max-height: 65px;
-  object-fit: contain;
+.info-col-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.5px;
 }
-.brand h1 { display: none; }
-.brand b { color: #0D47A1; font-size: 15px; }
-.brand p { margin: 2px 0 0; color: #455A64; line-height: 1.35; font-size: 10px; }
-
-.header-right-badge { text-align: right; }
-.doc-ref-info { margin-top: 2px; font-size: 10.5px; color: #37474F; text-align: right; line-height: 1.45; }
-
-.head-divider {
-  height: 3px;
-  border-top: 2px solid #F5A623;
-  border-bottom: 1.5px solid #1565C0;
-  margin: 10px 0;
-}
-
-/* ─── BANNER ─── */
-.title {
-  background: #0D47A1; color: #FFFFFF; text-align: center;
-  padding: 6px 10px; font-size: 16px; font-weight: 800; letter-spacing: 2px;
-  margin: 10px 0; border-radius: 4px; border-bottom: 2px solid #F5A623;
-}
-
-/* ─── GRID DETAILS BOXES ─── */
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.box {
-  border: 1px solid #BBDEFB; background: #FFFFFF; border-radius: 5px;
-  padding: 10px; min-height: 100px; box-shadow: 0 1px 5px rgba(0,0,0,0.03);
-}
-.box h3 {
-  margin: 0 0 6px; color: #1565C0; font-size: 11.5px; font-weight: 700;
-  border-bottom: 1px solid #E3F2FD; padding-bottom: 4px;
-}
-.label { font-weight: 700; color: #1565C0; }
-.box p { margin: 3px 0; font-size: 10.5px; color: #263238; }
-
-/* Status Pill */
-.status-pill {
-  display: inline-block; padding: 1px 8px; border-radius: 10px;
-  font-size: 10px; font-weight: 700; text-transform: capitalize;
+.info-col-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0F172A;
 }
 
 /* ─── ITEMS TABLE ─── */
-table.items-table {
-  width: 100%; border-collapse: collapse; margin: 12px 0;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.03); border-radius: 4px; overflow: hidden;
+table.po-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  font-size: 10.5px;
 }
-table.items-table th {
-  background: linear-gradient(135deg, #0D47A1, #1565C0);
-  color: #FFFFFF; font-weight: 700; font-size: 10.5px; padding: 6px 8px;
-  border: 1px solid #1565C0; text-align: left;
+table.po-table th {
+  background: #F8FAFC;
+  color: #475569;
+  font-weight: 700;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 10px;
+  border: 1px solid #E2E8F0;
+  text-align: left;
 }
-table.items-table td {
-  border: 1px solid #E0E0E0; padding: 6px 8px; text-align: left;
-  vertical-align: middle; font-size: 10px;
+table.po-table td {
+  border: 1px solid #E2E8F0;
+  padding: 10px;
+  vertical-align: top;
+  color: #1E293B;
 }
-table.items-table td:nth-child(n+4) { text-align: right; }
-table.items-table tbody tr:nth-child(even) { background-color: #F0F7FF; }
-table.items-table tbody tr:nth-child(odd) { background-color: #FFFFFF; }
-table.items-table tbody tr:hover { background-color: #DDEEFF; }
-table.items-table td:first-child { border-left: 3px solid #1565C0; text-align: center; width: 30px; }
-table.items-table td:last-child { font-weight: 700; color: #0D47A1; background-color: rgba(21, 101, 192, 0.04); }
+table.po-table td.text-center { text-align: center; }
+table.po-table td.text-right { text-align: right; }
 
-.sn-badge {
-  background: #1565C0; color: #ffffff; width: 18px; height: 18px;
-  border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
-  font-size: 9.5px; font-weight: 700; margin: 0 auto;
+.item-desc-title {
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 2px;
 }
-
-/* ─── TOTALS SECTION ─── */
-.totals-wrapper { display: flex; flex-direction: column; align-items: flex-end; margin-top: 8px; }
-.totals-card {
-  width: 270px; border: 1px solid #BBDEFB; border-radius: 5px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.03); overflow: hidden; background: #FFFFFF;
+.item-desc-sub {
+  font-size: 9.5px;
+  color: #64748B;
+  margin-bottom: 4px;
 }
-.totals-table { width: 100%; border-collapse: collapse; }
-.totals-table td { padding: 5px 10px; border: none; border-bottom: 1px solid #E3F2FD; font-size: 10.5px; }
-.totals-table td:last-child { text-align: right; }
-.totals-table tr.grand-row td {
-  background: #0D47A1 !important; color: #FFFFFF !important;
-  font-size: 11.5px !important; font-weight: 800 !important;
-  padding: 7px 10px !important; border-bottom: none !important;
-}
-
-.amount-in-words-box {
-  width: 100%; margin-top: 6px; padding: 6px 10px; background: #F0F7FF;
-  border: 1px solid #BBDEFB; border-radius: 5px; font-size: 10px;
-  color: #0D47A1; box-sizing: border-box;
+.item-desc-make {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #0072CE;
 }
 
-/* ─── NOTES SECTION (SHORT) ─── */
-.notes-section {
-  background: #FFFDE7; border-left: 3px solid #FFA000;
-  border-top: 1px solid #FFE082; border-right: 1px solid #FFE082; border-bottom: 1px solid #FFE082;
-  border-radius: 4px; padding: 8px 12px; margin: 10px 0;
-}
-.notes-section h3 {
-  margin: 0 0 4px 0; color: #E65100; font-size: 11px; font-weight: 700;
-  display: flex; align-items: center; gap: 4px;
-}
-.notes-section ol { margin: 0; padding-left: 16px; color: #424242; font-size: 9.5px; line-height: 1.4; }
-
-/* ─── TERMS AND CONDITIONS SECTION (SHORT) ─── */
-.terms-section {
-  background: #E3F2FD; border: 1px solid #BBDEFB; border-radius: 5px;
-  padding: 8px 12px; margin: 10px 0;
-}
-.terms-title {
-  margin: 0 0 6px 0; color: #0D47A1; font-size: 11px; font-weight: 700;
-  border-left: 3px solid #1565C0; padding-left: 6px; letter-spacing: 0.5px;
-}
-.terms-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.term-item { font-size: 9.5px; line-height: 1.35; color: #263238; }
-.term-num { font-weight: 700; color: #1565C0; }
-
-/* ─── SIGNATURES SECTION ─── */
-.signatures-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
-.sig-card {
-  border: 1px solid #BBDEFB; border-top: 3px solid #1565C0; border-radius: 5px;
-  background: #FFFFFF; padding: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.02);
-}
-.sig-title {
-  font-weight: 700; color: #1565C0; font-size: 10.5px; margin-bottom: 4px;
-  border-bottom: 1px solid #E3F2FD; padding-bottom: 3px;
-}
-.signature-box {
-  height: 70px; border: 1px dashed #42A5F5; border-radius: 4px;
-  position: relative; text-align: center; background: #FAFAFA;
-  display: flex; align-items: center; justify-content: center; margin-bottom: 6px;
-}
-.signature-box canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
-.signature-box img { max-height: 60px; max-width: 90%; object-fit: contain; }
-.sig-hint { font-size: 9px; color: #78909C; font-style: italic; }
-.sig-fields p { margin: 2px 0; font-size: 9.5px; color: #37474F; }
-.seal-placeholder {
-  width: 48px; height: 48px; border: 1.5px dashed #1565C0; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; font-size: 8px;
-  color: #1565C0; font-weight: 700; text-align: center; margin: 4px auto 0; line-height: 1.1;
+/* ─── BOTTOM SPLIT SECTION ─── */
+.bottom-split {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 16px;
+  margin-top: auto;
 }
 
-/* ─── FOOTER ─── */
-.doc-footer {
-  background: #0D47A1; color: #FFFFFF; border-top: 2px solid #F5A623;
-  padding: 6px 12px; margin-top: 10px; border-radius: 4px;
-  display: flex; justify-content: space-between; align-items: center; font-size: 9px;
+/* Left: Terms & Config Box */
+.left-config-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-.doc-erp-tagline {
-  text-align: center; font-size: 8px; color: #78909C; margin-top: 4px; font-weight: 600;
+.terms-box-wrapper {
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: #FFFFFF;
+}
+.section-mini-heading {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.tc-textarea-input {
+  width: 100%;
+  height: 60px;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 10.5px;
+  font-family: inherit;
+  color: #334155;
+  resize: vertical;
 }
 
-/* ─── FLOATING SIGNATURE PANEL ─── */
-.panel {
-  display: none; position: fixed; right: 16px; top: 70px; width: 360px; max-width: calc(100vw - 32px);
-  background: #fff; z-index: 1000; padding: 0; border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.25); border: 1px solid #BBDEFB; overflow: hidden;
+.pdf-config-box {
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: #FFFFFF;
 }
-.panel.open { display: block; }
-.panel-head { background: #0D47A1; color: #FFFFFF; padding: 10px 14px; font-weight: 700; font-size: 13px; }
-.panel-body { padding: 14px; }
-.tabs { display: flex; gap: 4px; border-bottom: 1px solid #BBDEFB; margin-bottom: 10px; }
-.tabs button { border: 0; background: none; color: #1565C0; padding: 8px 12px; font-weight: 700; cursor: pointer; }
-.tabs button.active { border-bottom: 3px solid #F5A623; color: #0D47A1; }
-.tab { display: none; }
-.tab.active { display: block; }
-.pad { width: 100%; height: 140px; border: 1px solid #BBDEFB; border-radius: 4px; touch-action: none; background: #fafafa; }
-.panel input, .panel select { width: 100%; margin: 5px 0 10px; padding: 8px; border: 1px solid #BBDEFB; border-radius: 4px; box-sizing: border-box; }
-.typed { font-size: 28px; min-height: 45px; text-align: center; }
-.cursive { font-family: cursive; }
-.formal { font-family: Georgia, serif; font-style: italic; }
-.btn-panel { padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; }
-.btn-primary { background: #1565C0; color: #fff; border: none; }
-.btn-secondary { background: #E0E0E0; color: #333; border: none; }
+.config-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.btn-add-sig {
+  background: #0F172A;
+  color: #FFF;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.config-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 10.5px;
+  color: #334155;
+  margin-bottom: 10px;
+}
+.sig-inputs-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.sig-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.sig-field-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #94A3B8;
+  text-transform: uppercase;
+}
+.sig-input-blue {
+  background: #2563EB;
+  color: #FFF;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 10.5px;
+  font-weight: 700;
+  width: 100%;
+}
+.sig-input-white {
+  background: #FFFFFF;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 10.5px;
+  width: 100%;
+}
+.btn-del-icon {
+  background: none;
+  border: none;
+  color: #EF4444;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+}
 
-/* PRINT MEDIA QUERY */
+/* Right: Financial Summary Box */
+.financial-summary-card {
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  padding: 12px 14px;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.fin-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #475569;
+}
+.fin-row strong {
+  color: #0F172A;
+  font-weight: 700;
+}
+.fin-input-box {
+  width: 80px;
+  text-align: right;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 11px;
+  font-family: inherit;
+  color: #0F172A;
+}
+.fin-divider {
+  height: 1px;
+  background: #E2E8F0;
+  margin: 4px 0;
+}
+.grand-total-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-top: 4px;
+}
+.grand-total-display span:last-child {
+  font-size: 15px;
+}
+
+/* ─── PAGE 2 (GENERAL TERMS & CONDITIONS) ─── */
+.terms-page-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 6px 0 16px 0;
+}
+
+.full-terms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 10px;
+  line-height: 1.45;
+  color: #334155;
+}
+.full-term-item strong {
+  color: #0072CE;
+  font-weight: 700;
+}
+
+.page2-bottom-area {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.seal-circle-container {
+  display: flex;
+  justify-content: flex-end;
+}
+.corporate-seal-badge {
+  width: 110px;
+  height: 110px;
+  border: 2px dashed #0084FF;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #0072CE;
+  line-height: 1.25;
+  padding: 6px;
+}
+
+.page2-footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #E2E8F0;
+  padding-top: 10px;
+  font-size: 9.5px;
+  color: #94A3B8;
+}
+
+/* ─── PRINT & PDF OVERRIDES ─── */
 @media print {
-  .toolbar, .panel, .no-print, .corner-mark { display: none !important; }
-  body { background: #fff !important; margin: 0 !important; }
-  .paper { box-shadow: none !important; margin: 0 !important; width: 100% !important; border: none !important; padding: 0 !important; }
-}
-
-@media(max-width: 850px) {
-  .paper { width: calc(100% - 16px); padding: 5mm; }
-  .grid, .signatures-grid, .terms-list { grid-template-columns: 1fr; }
-  .toolbar { flex-wrap: wrap; }
-  .push { margin-left: 0; }
-  table.items-table { font-size: 8px; }
-  table.items-table th, table.items-table td { padding: 4px; }
-  .brand-logo { width: 85px; }
+  .toolbar { display: none !important; }
+  body { background: #FFF !important; margin: 0 !important; }
+  .pdf-container { width: 100% !important; margin: 0 !important; gap: 0 !important; }
+  .paper-page {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 12mm 14mm !important;
+    min-height: 297mm !important;
+    page-break-after: always !important;
+  }
 }
 </style>
 </head>
@@ -346,473 +538,378 @@ table.items-table td:last-child { font-weight: 700; color: #0D47A1; background-c
 
 <nav class="toolbar" id="toolbar">
   <a href="purchase-orders.html">← Back</a>
-  <span class="tb-po-title">PO: <span style="color:#F5A623; font-weight:bold;" id="tbPoNum">PO0003</span></span>
-  <span class="tb-verified-badge">✓ Verified Document</span>
-  
-  <button data-c="bold" title="Bold"><b>B</b></button>
-  <button data-c="italic" title="Italic"><i>I</i></button>
-  <button data-c="underline" title="Underline"><u>U</u></button>
-  
-  <button id="addSig">Add Signature</button>
-  <button id="clearSig">Clear Signature</button>
-  <button id="reset">Reset</button>
-  <button id="shareBtn">🔗 Share</button>
-  
   <span class="push"></span>
-  <button class="gold" id="download">📥 Download PDF</button>
-  <button id="print">🖨️ Print</button>
+  <a href="purchase-orders.html">Back</a>
+  <button id="download" class="tb-btn-white">📥 Download PDF</button>
 </nav>
 
-<aside class="panel" id="panel">
-  <div class="panel-head">Signature Manager</div>
-  <div class="panel-body">
-    <div class="tabs">
-      <button class="active" data-t="draw">Draw</button>
-      <button data-t="upload">Upload</button>
-      <button data-t="type">Type</button>
-    </div>
-    <div id="draw" class="tab active">
-      <canvas id="pad" class="pad" width="640" height="280"></canvas>
-      <button id="clearPad" class="btn-panel btn-secondary" style="margin-top:6px;">Clear drawing</button>
-    </div>
-    <div id="upload" class="tab">
-      <input id="uploadFile" type="file" accept="image/*">
-    </div>
-    <div id="type" class="tab">
-      <input id="typeName" placeholder="Type full name">
-      <select id="typeStyle">
-        <option value="cursive">Cursive Font</option>
-        <option value="formal">Formal Script</option>
-      </select>
-      <div id="typeView" class="typed cursive"></div>
-    </div>
-    <label style="font-weight:bold; font-size:12px; margin-top:10px; display:block;">Apply to:</label>
-    <select id="target">
-      <option value="buyer">Buyer Signature</option>
-      <option value="supplier">Supplier Signature</option>
-    </select>
-    <div style="display:flex; gap:8px; margin-top:10px;">
-      <button id="apply" class="btn-panel btn-primary" style="flex:1;">Apply Signature</button>
-      <button id="close" class="btn-panel btn-secondary">Cancel</button>
-    </div>
-  </div>
-</aside>
+<div class="pdf-container" id="pdfContainer">
 
-<main id="doc" class="paper" contenteditable="true" spellcheck="true">
-  <!-- Content dynamically rendered via JS -->
-</main>
-
-<script>
-const toolbar = document.getElementById('toolbar');
-const po = JSON.parse(localStorage.getItem('bluefinchPoPreview') || 'null');
-const doc = document.getElementById('doc');
-
-const money = n => '₹ ' + Number(n || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const esc = s => String(s ?? '').replace(/[&<>"']/g, x => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[x]));
-
-function getStatusBadge(statusStr) {
-  const st = String(statusStr || 'Pending').trim();
-  let bg = '#FFF3E0', fg = '#E65100', border = '#FFE0B2';
-  const lower = st.toLowerCase();
-  if (lower === 'approved' || lower === 'completed') {
-    bg = '#E8F5E9'; fg = '#2E7D32'; border = '#C8E6C9';
-  } else if (lower === 'rejected' || lower === 'cancelled') {
-    bg = '#FFEBEE'; fg = '#C62828'; border = '#FFCDD2';
-  } else if (lower === 'draft') {
-    bg = '#E3F2FD'; fg = '#1565C0'; border = '#BBDEFB';
-  }
-  return `<span class="status-pill" style="background:${bg}; color:${fg}; border:1px solid ${border};">${esc(st)}</span>`;
-}
-
-function numberToWords(amount) {
-  const num = Math.floor(amount || 0);
-  const paise = Math.round(((amount || 0) - num) * 100);
-  const a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 
-             'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-  const b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-
-  function inWords(n) {
-    if (n < 20) return a[n];
-    if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? ' ' + a[n % 10] : '');
-    if (n < 1000) return a[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' ' + inWords(n % 100) : '');
-    if (n < 100000) return inWords(Math.floor(n / 1000)) + ' Thousand' + (n % 1000 ? ' ' + inWords(n % 1000) : '');
-    if (n < 10000000) return inWords(Math.floor(n / 100000)) + ' Lakh' + (n % 100000 ? ' ' + inWords(n % 100000) : '');
-    return inWords(Math.floor(n / 10000000)) + ' Crore' + (n % 10000000 ? ' ' + inWords(n % 10000000) : '');
-  }
-
-  let str = 'Rupees ';
-  if (num === 0) {
-    str += 'Zero';
-  } else {
-    str += inWords(num);
-  }
-
-  if (paise > 0) {
-    str += ' and ' + inWords(paise) + ' Paise';
-  }
-  str += ' Only';
-  return str;
-}
-
-if (!po) {
-  doc.innerHTML = `<h2 style="color:#1565C0;">Purchase order not found</h2><p>Return to the list and select PDF again.</p>`;
-} else {
-  document.getElementById('tbPoNum').textContent = po.po_number || 'PO0003';
-
-  let rows = (po.items || []).map((x, i) => `
-    <tr>
-      <td><span class="sn-badge">${i + 1}</span></td>
-      <td>${esc(x.description || x.item_code)}</td>
-      <td>${esc(x.item_code || '—')}</td>
-      <td>${esc(x.quantity)}</td>
-      <td>${esc(x.unit)}</td>
-      <td>${money(x.unit_price)}</td>
-      <td>${esc(x.tax || 0)}%</td>
-      <td>${money(x.line_total)}</td>
-    </tr>
-  `).join('');
-
-  doc.innerHTML = `
-    <!-- Top Corner Marks -->
-    <div class="corner-mark corner-tl"></div>
-    <div class="corner-mark corner-tr"></div>
-    <div class="corner-mark corner-bl"></div>
-    <div class="corner-mark corner-br"></div>
-
-    <!-- Document Watermark (no-print) -->
-    <div class="watermark no-print" aria-hidden="true">OFFICIAL PURCHASE ORDER</div>
-
-    <!-- Document Header -->
-    <header class="head">
-      <div class="brand">
-        <img class="brand-logo" src="../picture/logo.png" alt="BlueSun logo">
-        <div>
-          <h1>BlueSun</h1>
-          <b>Bluesun International LLC</b>
-          <p>
-            <span class="label">Address:</span> Ghala, 250 Way no. 5001, 112, Muscat, Oman<br>
-            <span class="label">Phone:</span> +968 22584259 &nbsp; <span class="label">Email:</span> sales@bluesun-om.com
-          </p>
+  <!-- ════════════════ PAGE 1 ════════════════ -->
+  <main class="paper-page" id="page1">
+    <!-- Header -->
+    <header class="doc-header">
+      <div class="brand-area">
+        <img src="../picture/logo.png" alt="BlueSun Logo" class="brand-logo-img">
+        <div class="brand-title-wrap">
+          <span class="brand-main-title">BlueSun</span>
+          <span class="brand-sub-title">International</span>
         </div>
       </div>
-      <div class="header-right-badge">
-        <div class="doc-ref-info">
-          <span class="label">Status:</span> ${getStatusBadge(po.status)}<br>
-          <span class="label">Reference:</span> ${esc(po.reference_number || 'PO0003')}
+      <div class="contact-info-list">
+        <div class="contact-item">
+          <span>sales@bluesun-om.com</span>
+          <span class="contact-icon">✉</span>
+        </div>
+        <div class="contact-item">
+          <span>+968 2450 4278 / +968 2258 4259</span>
+          <span class="contact-icon">📞</span>
+        </div>
+        <div class="contact-item">
+          <span>PO: BOX: 778, PC: 111, North Alghubra Bousher, Muscat Governorate, Oman</span>
+          <span class="contact-icon">📍</span>
         </div>
       </div>
     </header>
 
-    <div class="head-divider"></div>
+    <div class="head-accent-bar">
+      <div class="head-accent-blue"></div>
+      <div class="head-accent-dark"></div>
+    </div>
 
-    <!-- Title Banner -->
-    <div class="title">PURCHASE ORDER</div>
+    <!-- Title & Metadata -->
+    <h1 class="po-main-heading">PURCHASE ORDER</h1>
+    <div class="po-meta-strip">
+      <div>PO REF: <strong id="poRef">PO-0003</strong></div>
+      <div>DATE: <strong id="poDate">2026-08-25</strong></div>
+      <div>YOUR REF / INQUIRY NO: <strong id="poInquiry">5646954574575764</strong></div>
+    </div>
 
-    <!-- Details Grid Boxes -->
-    <section class="grid">
-      <div class="box">
-        <h3>Purchase Order Details</h3>
-        <p><span class="label">📋 PO Number:</span> ${esc(po.po_number)}</p>
-        <p><span class="label">📅 PO Date:</span> ${esc(po.po_date)}</p>
-        <p><span class="label">🚚 Delivery Date:</span> ${esc(po.expected_delivery_date)}</p>
-        <p><span class="label">✅ Status:</span> ${getStatusBadge(po.status)}</p>
-        <p><span class="label">💳 Payment Terms:</span> ${esc(po.payment_terms)}</p>
+    <!-- Party Grid (Supplier / Buyer) -->
+    <section class="party-grid">
+      <div class="party-box">
+        <div class="party-label">SUPPLIER</div>
+        <div class="party-name" id="supName">ABC Office Supplies LLC</div>
+        <div class="party-address" id="supAddr">
+          Ruwi High Street, Commercial Zone, CBD<br>
+          P.O. Box 892, Postal Code 112, Sultanate of Oman
+        </div>
+        <div class="party-detail-row"><span>CONTACT:</span> <strong id="supContact">Rajesh Sharma</strong></div>
+        <div class="party-detail-row"><span>PHONE:</span> <strong id="supPhone">+968 2478 9900 / 9123 4567</strong></div>
+        <div class="party-detail-row"><span>EMAIL:</span> <strong id="supEmail">orders@abcoffice.com</strong></div>
       </div>
-      <div class="box">
-        <h3>Supplier Details</h3>
-        <p><span class="label">🏢 Supplier Name:</span> ${esc(po.supplier_name)}</p>
-        <p><span class="label">👤 Contact Person:</span> [Click to add]</p>
-        <p><span class="label">✉️ Email:</span> [Click to add]</p>
-        <p><span class="label">📞 Phone:</span> [Click to add]</p>
+
+      <div class="party-box">
+        <div class="party-label">BUYER</div>
+        <div class="party-name">M/s. BlueSun International LLC</div>
+        <div class="party-address">
+          Ghala Industrial Area, Way 5001, Bldg 112<br>
+          P.O. Box 778, Postal Code 111, Sultanate of Oman
+        </div>
+        <div class="party-detail-row"><span>BUYER CONTACT:</span> <strong>Tariq Al-Harthy</strong></div>
+        <div class="party-detail-row"><span>PHONE:</span> <strong>+968 2258 4260 / 2450 4278</strong></div>
+        <div class="party-detail-row"><span>TRN / VAT:</span> <strong>OM110029384</strong></div>
+      </div>
+    </section>
+
+    <!-- 4-Column Info Strip -->
+    <section class="info-bar-4col">
+      <div class="info-col">
+        <span class="info-col-label">OFFER VALIDITY</span>
+        <span class="info-col-val" id="valValidity">30 Days</span>
+      </div>
+      <div class="info-col">
+        <span class="info-col-label">PAYMENT TERMS</span>
+        <span class="info-col-val" id="valPaymentTerms">Net 30 Days</span>
+      </div>
+      <div class="info-col">
+        <span class="info-col-label">DELIVERY LOCATION</span>
+        <span class="info-col-val" id="valDeliveryLoc">DDP Muscat Limit</span>
+      </div>
+      <div class="info-col">
+        <span class="info-col-label">CURRENCY</span>
+        <span class="info-col-val" id="valCurrency">INR (₹)</span>
       </div>
     </section>
 
     <!-- Items Table -->
-    <table class="items-table">
+    <table class="po-table">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Item Description</th>
-          <th>HSN Code</th>
-          <th>Qty</th>
-          <th>Unit</th>
-          <th>Unit Price</th>
-          <th>GST%</th>
-          <th>Total</th>
+          <th style="width:40px;" class="text-center">SL.NO</th>
+          <th style="width:80px;">CODE</th>
+          <th>DESCRIPTION</th>
+          <th style="width:45px;" class="text-center">QTY</th>
+          <th style="width:50px;" class="text-center">UNIT</th>
+          <th style="width:75px;" class="text-right">PRICE</th>
+          <th style="width:55px;" class="text-right">VAT %</th>
+          <th style="width:85px;" class="text-right">LINE TOTAL</th>
         </tr>
       </thead>
-      <tbody>
-        ${rows}
+      <tbody id="itemsTbody">
+        <!-- Dynamic item rows -->
       </tbody>
     </table>
 
-    <!-- Totals Section -->
-    <div class="totals-wrapper">
-      <div class="totals-card">
-        <table class="totals-table">
-          <tr>
-            <td><span>💵 Sub Total</span></td>
-            <td>${money(po.subtotal)}</td>
-          </tr>
-          <tr>
-            <td style="color:#1565C0; font-style:italic;"><span>📊 GST</span></td>
-            <td style="color:#1565C0; font-style:italic;">${money(po.total_tax)}</td>
-          </tr>
-          <tr>
-            <td style="color:#2E7D32; font-weight:bold;"><span>🏷️ Discount</span></td>
-            <td style="color:#2E7D32; font-weight:bold;">${money(po.total_discount)}</td>
-          </tr>
-          <tr>
-            <td><span>🚚 Shipping / Add. Charges</span></td>
-            <td>${money(po.additional_charges)}</td>
-          </tr>
-          <tr class="grand-row">
-            <td><strong>💰 Grand Total</strong></td>
-            <td><strong>${money(po.grand_total)}</strong></td>
-          </tr>
-        </table>
+    <!-- Bottom Split Section -->
+    <section class="bottom-split">
+      <div class="left-config-col">
+        <!-- Terms and Conditions Box -->
+        <div class="terms-box-wrapper">
+          <div class="section-mini-heading">TERMS AND CONDITIONS</div>
+          <textarea class="tc-textarea-input" id="tcNotesInput">ggdhftdtytd</textarea>
+        </div>
+
+        <!-- PDF Print Configuration Box -->
+        <div class="pdf-config-box">
+          <div class="config-header-row">
+            <span class="section-mini-heading" style="margin:0;">PDF PRINT CONFIGURATION</span>
+            <button class="btn-add-sig" id="addSigBtn">+ Add Signatory</button>
+          </div>
+          <div class="config-checkboxes">
+            <label><input type="checkbox" id="chkSigSlots" checked> Include Signatory Slots</label>
+            <label><input type="checkbox" id="chkAttachSeal"> Attach Seal (Preview & PDF)</label>
+          </div>
+          <div class="sig-inputs-row">
+            <div class="sig-field-group">
+              <span class="sig-field-label">SIGNATORY NAME</span>
+              <input type="text" class="sig-input-blue" value="ABIN">
+            </div>
+            <div class="sig-field-group">
+              <span class="sig-field-label">POSITION / TITLE</span>
+              <input type="text" class="sig-input-white" value="Authorized Representative">
+            </div>
+            <button class="btn-del-icon" title="Delete">🗑️</button>
+          </div>
+        </div>
       </div>
-      <div class="amount-in-words-box">
-        <strong>Amount in Words:</strong> ${numberToWords(po.grand_total)}
+
+      <!-- Financial Summary Card -->
+      <div class="financial-summary-card">
+        <div class="section-mini-heading">FINANCIAL SUMMARY</div>
+        
+        <div class="fin-row">
+          <span>Items Total Amount</span>
+          <strong id="finItemsTotal">50.000</strong>
+        </div>
+        <div class="fin-row">
+          <span>Total VAT Amount</span>
+          <strong id="finVatTotal">2.500</strong>
+        </div>
+        <div class="fin-row">
+          <span>Line Discounts Total</span>
+          <strong id="finDiscTotal">0.000</strong>
+        </div>
+
+        <div class="fin-divider"></div>
+
+        <div class="fin-row">
+          <span>Delivery Charge</span>
+          <input type="text" class="fin-input-box" value="0.000" id="finDeliveryCharge">
+        </div>
+        <div class="fin-row">
+          <span>Special Discount</span>
+          <input type="text" class="fin-input-box" value="0.000" id="finSpecialDiscount">
+        </div>
+        <div class="fin-row">
+          <span>Round Off</span>
+          <input type="text" class="fin-input-box" value="0.000" id="finRoundOff">
+        </div>
+
+        <div class="fin-divider"></div>
+
+        <div class="grand-total-display">
+          <span>GRAND TOTAL (OMR)</span>
+          <span id="finGrandTotal">52.500</span>
+        </div>
       </div>
+    </section>
+  </main>
+
+
+  <!-- ════════════════ PAGE 2 ════════════════ -->
+  <main class="paper-page" id="page2">
+    <!-- Header -->
+    <header class="doc-header">
+      <div class="brand-area">
+        <img src="../picture/logo.png" alt="BlueSun Logo" class="brand-logo-img">
+        <div class="brand-title-wrap">
+          <span class="brand-main-title">BlueSun</span>
+          <span class="brand-sub-title">International</span>
+        </div>
+      </div>
+      <div class="contact-info-list">
+        <div class="contact-item">
+          <span>sales@bluesun-om.com</span>
+          <span class="contact-icon">✉</span>
+        </div>
+        <div class="contact-item">
+          <span>+968 2450 4278 / +968 2258 4259</span>
+          <span class="contact-icon">📞</span>
+        </div>
+        <div class="contact-item">
+          <span>PO BOX: 778, PC: 111, North Alghubra, Bousher, Muscat, Oman</span>
+          <span class="contact-icon">📍</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="head-accent-bar">
+      <div class="head-accent-blue"></div>
+      <div class="head-accent-dark"></div>
     </div>
 
-    <!-- Notes & Special Instructions Section (Short & Editable) -->
-    <section class="notes-section" contenteditable="true">
-      <h3>⚠️ Notes & Special Instructions</h3>
-      <ol>
-        <li>Ensure all items are properly packed and labeled with the PO Number before dispatch.</li>
-        <li>Delivery must be accompanied by a packing list and original tax invoice.</li>
-      </ol>
-    </section>
+    <!-- Title -->
+    <div class="terms-page-title">GENERAL TERMS & CONDITIONS</div>
 
-    <!-- Terms and Conditions Section (Short & Non-Editable) -->
-    <section class="terms-section" contenteditable="false">
-      <h3 class="terms-title">TERMS AND CONDITIONS</h3>
-      <div class="terms-list">
-        <div class="term-item">
-          <span class="term-num">1. Acceptance & Price:</span> Binding upon written acceptance or delivery. Prices are fixed as stated.
-        </div>
-        <div class="term-item">
-          <span class="term-num">2. Delivery & Quality:</span> Goods must be delivered by agreed date and pass quality inspection.
-        </div>
-        <div class="term-item">
-          <span class="term-num">3. Invoicing & Payment:</span> Valid tax invoice required. Payment processed per agreed payment terms.
-        </div>
-        <div class="term-item">
-          <span class="term-num">4. Governing Law:</span> Governed by laws of Sultanate of Oman. Courts of Muscat hold jurisdiction.
-        </div>
+    <!-- 10 Full Clauses -->
+    <section class="full-terms-list">
+      <div class="full-term-item">
+        <strong>1. ACCEPTANCE</strong><br>
+        This Purchase Order constitutes a legally binding agreement between Bluesun International LLC (Buyer) and the Supplier upon acceptance. Acceptance occurs when the Supplier acknowledges this PO in writing or begins fulfillment of the order.
+      </div>
+      <div class="full-term-item">
+        <strong>2. DELIVERY</strong><br>
+        All goods must be delivered to the specified delivery address by the agreed Delivery Date mentioned in this Purchase Order. Any delay must be communicated in writing at least 48 hours in advance. Bluesun International LLC reserves the right to cancel the order if delivery is not met without prior notice.
+      </div>
+      <div class="full-term-item">
+        <strong>3. QUALITY & INSPECTION</strong><br>
+        All goods are subject to quality inspection upon receipt. Bluesun International LLC reserves the right to reject goods that do not conform to the agreed specifications, quality standards, or quantities. Rejected goods must be replaced within 5 business days at no extra cost.
+      </div>
+      <div class="full-term-item">
+        <strong>4. INVOICING & PAYMENT</strong><br>
+        The Supplier must submit a valid tax invoice referencing this PO Number on all documents. Payment will be processed within the agreed Payment Terms stated above, calculated from the date of receipt of goods and valid invoice. Late invoices may result in delayed payment.
+      </div>
+      <div class="full-term-item">
+        <strong>5. PRICING</strong><br>
+        The prices stated in this Purchase Order are fixed and binding. No additional charges, surcharges, or price variations will be accepted without prior written approval from an authorized representative of Bluesun International LLC.
+      </div>
+      <div class="full-term-item">
+        <strong>6. TAXES & DUTIES</strong><br>
+        All applicable taxes (GST/VAT) must be clearly stated in the invoice as per the rates mentioned in this Purchase Order. The Supplier is responsible for compliance with all applicable tax regulations.
+      </div>
+      <div class="full-term-item">
+        <strong>7. CONFIDENTIALITY</strong><br>
+        The Supplier agrees to keep all information contained in this Purchase Order strictly confidential and shall not disclose it to any third party without prior written consent from Bluesun International LLC.
+      </div>
+      <div class="full-term-item">
+        <strong>8. CANCELLATION</strong><br>
+        Bluesun International LLC reserves the right to cancel this Purchase Order in whole or in part by providing written notice to the Supplier. Cancellation of orders already in production will be subject to mutual agreement on costs incurred.
+      </div>
+      <div class="full-term-item">
+        <strong>9. GOVERNING LAW</strong><br>
+        This Purchase Order shall be governed by and construed in accordance with the laws of the Sultanate of Oman. Any disputes arising from this agreement shall be subject to the exclusive jurisdiction of the courts of Muscat, Oman.
+      </div>
+      <div class="full-term-item">
+        <strong>10. FORCE MAJEURE</strong><br>
+        Neither party shall be liable for failure to perform obligations due to circumstances beyond reasonable control including acts of God, natural disasters, war, government restrictions, or pandemic.
       </div>
     </section>
 
-    <!-- Signatures Section -->
-    <section class="signatures-grid">
-      <div class="sig-card" data-s="buyer">
-        <div class="sig-title">Authorized Signatory (Buyer)</div>
-        <div class="signature-box">
-          <span class="sig-hint">Double-click to sign</span>
-        </div>
-        <div class="sig-fields">
-          <p><strong>Name:</strong> ___________________</p>
-          <p><strong>Designation:</strong> Procurement Manager</p>
-          <p><strong>Date:</strong> ${esc(po.po_date || '')}</p>
-        </div>
-        <div class="seal-placeholder">
-          <span>Company<br>Seal</span>
+    <!-- Bottom Seal & Footer -->
+    <div class="page2-bottom-area">
+      <div class="seal-circle-container">
+        <div class="corporate-seal-badge">
+          BLUESUN INT'L LLC<br>
+          ★ OFFICIAL ★<br>
+          CORPORATE SEAL<br>
+          Muscat, Oman
         </div>
       </div>
 
-      <div class="sig-card" data-s="supplier">
-        <div class="sig-title">Supplier Acceptance</div>
-        <div class="signature-box">
-          <span class="sig-hint">Double-click to sign</span>
-        </div>
-        <div class="sig-fields">
-          <p><strong>Name:</strong> ___________________</p>
-          <p><strong>Designation:</strong> Authorized Representative</p>
-          <p><strong>Date:</strong> ___________________</p>
-        </div>
-        <div class="seal-placeholder">
-          <span>Supplier<br>Seal</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Document Footer -->
-    <footer class="doc-footer">
-      <div><strong>Bluesun International LLC</strong> | ProcureX ERP</div>
-      <div>This is a system generated document — No physical signature required</div>
-      <div>Page 1 of 1 | ${new Date().toISOString().slice(0, 10)}</div>
-    </footer>
-    <div class="doc-erp-tagline">
-      Generated by ProcureX ERP | Version 2.0 | Powered by Bluesun International LLC
+      <footer class="page2-footer-bar">
+        <div>PO Reference: <span id="p2PoRef">PO-0003</span> | Page 2 of 2 (Standard Commercial Terms)</div>
+        <div>Bluesun International LLC © All Rights Reserved</div>
+      </footer>
     </div>
-  `;
-}
+  </main>
 
-const original = doc.innerHTML;
+</div>
 
-// Rich text formatting toolbar
-document.querySelectorAll('[data-c]').forEach(x => x.onclick = () => {
-  document.execCommand(x.dataset.c);
-  doc.focus();
-});
+<script>
+const po = JSON.parse(localStorage.getItem('bluefinchPoPreview') || 'null');
 
-// Signature handling
-let active = 'draw', sig = '';
-const panel = document.getElementById('panel');
-const pad = document.getElementById('pad');
-const ctx = pad.getContext('2d');
-ctx.lineWidth = 4;
-ctx.strokeStyle = '#0D47A1';
-ctx.lineCap = 'round';
-let down = false, last;
+function num(v) { return Number(v || 0).toFixed(3); }
+function esc(s) { return String(s ?? '').replace(/[&<>"']/g, x => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[x])); }
 
-function p(e, c = pad) {
-  let r = c.getBoundingClientRect();
-  return { x: (e.clientX - r.left) * c.width / r.width, y: (e.clientY - r.top) * c.height / r.height };
-}
+if (po) {
+  const poRefStr = po.po_number || 'PO-0003';
+  document.getElementById('poRef').textContent = poRefStr;
+  document.getElementById('p2PoRef').textContent = poRefStr;
+  document.getElementById('poDate').textContent = po.po_date || '2026-08-25';
+  document.getElementById('poInquiry').textContent = po.reference_number || '5646954574575764';
 
-pad.onpointerdown = e => {
-  down = true;
-  last = p(e);
-  pad.setPointerCapture(e.pointerId);
-};
-pad.onpointermove = e => {
-  if (!down) return;
-  let q = p(e);
-  ctx.beginPath();
-  ctx.moveTo(last.x, last.y);
-  ctx.lineTo(q.x, q.y);
-  ctx.stroke();
-  last = q;
-  sig = pad.toDataURL();
-};
-pad.onpointerup = () => down = false;
+  if (po.supplier_name) document.getElementById('supName').textContent = po.supplier_name;
+  if (po.payment_terms) document.getElementById('valPaymentTerms').textContent = po.payment_terms;
 
-document.getElementById('clearPad').onclick = () => {
-  ctx.clearRect(0, 0, pad.width, pad.height);
-  sig = '';
-};
-
-document.getElementById('addSig').onclick = () => panel.classList.add('open');
-document.getElementById('close').onclick = () => panel.classList.remove('open');
-
-document.querySelectorAll('[data-t]').forEach(b => b.onclick = () => {
-  active = b.dataset.t;
-  document.querySelectorAll('[data-t],.tab').forEach(x => x.classList.remove('active'));
-  b.classList.add('active');
-  document.getElementById(active).classList.add('active');
-});
-
-document.getElementById('uploadFile').onchange = e => {
-  let r = new FileReader();
-  r.onload = () => sig = r.result;
-  if (e.target.files[0]) r.readAsDataURL(e.target.files[0]);
-};
-
-let n = document.getElementById('typeName'), st = document.getElementById('typeStyle'), v = document.getElementById('typeView');
-function typed() {
-  v.textContent = n.value;
-  v.className = 'typed ' + st.value;
-}
-n.oninput = typed;
-st.onchange = typed;
-
-function place(box) {
-  if (!box) return;
-  box.querySelectorAll('img,.typed,canvas,.sig-hint').forEach(x => x.remove());
-  if (active === 'type') {
-    let x = document.createElement('div');
-    x.className = 'typed ' + st.value;
-    x.textContent = n.value || 'Signature';
-    box.appendChild(x);
-  } else if (sig) {
-    let x = document.createElement('img');
-    x.src = sig;
-    box.appendChild(x);
-  }
-}
-
-document.getElementById('apply').onclick = () => {
-  place(document.querySelector(`[data-s="${document.getElementById('target').value}"] .signature-box`));
-  panel.classList.remove('open');
-};
-
-document.getElementById('clearSig').onclick = () => {
-  document.querySelectorAll('[data-s] .signature-box').forEach(x => {
-    x.querySelectorAll('img,.typed,canvas').forEach(y => y.remove());
-    if (!x.querySelector('.sig-hint')) {
-      x.innerHTML = `<span class="sig-hint">Double-click to sign</span>`;
+  const items = po.items && po.items.length ? po.items : [
+    {
+      item_code: 'ITM0001',
+      description: 'Workstation Desktop Tower - Intel Core i7 Configuration',
+      sub_desc: 'Intel Core i7 11th Gen Processor, 16GB DDR4 RAM, 512GB PCIe NVMe SSD, Windows 11 Pro',
+      make: 'MAKE: LENOVO THINKCENTRE OEM',
+      quantity: 1,
+      unit: 'PCS',
+      unit_price: 432.000,
+      tax: 5.0,
+      line_total: 453.600
     }
+  ];
+
+  let itemsHtml = '';
+  let subtotalSum = 0;
+  let taxSum = 0;
+
+  items.forEach((it, idx) => {
+    const qty = parseFloat(it.quantity || 1);
+    const price = parseFloat(it.unit_price || 0);
+    const taxRate = parseFloat(it.tax || 0);
+    const lineTot = parseFloat(it.line_total || (qty * price * (1 + taxRate/100)));
+
+    subtotalSum += (qty * price);
+    taxSum += (qty * price * (taxRate / 100));
+
+    itemsHtml += `
+      <tr>
+        <td class="text-center">${idx + 1}</td>
+        <td><strong>${esc(it.item_code || 'ITM0001')}</strong></td>
+        <td>
+          <div class="item-desc-title">${esc(it.description || 'Item Description')}</div>
+          ${it.sub_desc ? `<div class="item-desc-sub">${esc(it.sub_desc)}</div>` : ''}
+          ${it.make ? `<div class="item-desc-make">${esc(it.make)}</div>` : ''}
+        </td>
+        <td class="text-center"><strong>${qty}</strong></td>
+        <td class="text-center">${esc(it.unit || 'PCS')}</td>
+        <td class="text-right">${num(price)}</td>
+        <td class="text-right">${taxRate.toFixed(1)}%</td>
+        <td class="text-right"><strong>${num(lineTot)}</strong></td>
+      </tr>
+    `;
   });
-};
 
-function direct(box) {
-  box.querySelectorAll('.sig-hint').forEach(x => x.remove());
-  let c = document.createElement('canvas');
-  c.width = 500;
-  c.height = 144;
-  box.prepend(c);
-  let x = c.getContext('2d'), d = false, l;
-  x.lineWidth = 3;
-  x.strokeStyle = '#0D47A1';
-  x.lineCap = 'round';
-  c.onpointerdown = e => { d = true; l = p(e, c); c.setPointerCapture(e.pointerId); };
-  c.onpointermove = e => {
-    if (!d) return;
-    let q = p(e, c);
-    x.beginPath();
-    x.moveTo(l.x, l.y);
-    x.lineTo(q.x, q.y);
-    x.stroke();
-    l = q;
-  };
-  c.onpointerup = () => d = false;
+  document.getElementById('itemsTbody').innerHTML = itemsHtml;
+
+  const grandTotal = parseFloat(po.grand_total || (subtotalSum + taxSum));
+  document.getElementById('finItemsTotal').textContent = num(po.subtotal || subtotalSum);
+  document.getElementById('finVatTotal').textContent = num(po.total_tax || taxSum);
+  document.getElementById('finDiscTotal').textContent = num(po.total_discount || 0);
+  document.getElementById('finGrandTotal').textContent = num(grandTotal);
 }
-
-document.querySelectorAll('[data-s] .signature-box').forEach(x => x.ondblclick = () => !x.querySelector('canvas') && direct(x));
-
-document.getElementById('reset').onclick = () => {
-  if (confirm('Discard all edits and reset document?')) {
-    doc.innerHTML = original;
-    location.reload();
-  }
-};
-
-document.getElementById('shareBtn').onclick = () => {
-  if (navigator.share) {
-    navigator.share({
-      title: `Purchase Order ${po?.po_number || ''}`,
-      url: window.location.href
-    }).catch(() => {});
-  } else {
-    navigator.clipboard.writeText(window.location.href);
-    alert('Document link copied to clipboard!');
-  }
-};
 
 document.getElementById('download').onclick = () => {
-  panel.classList.remove('open');
+  const toolbar = document.getElementById('toolbar');
   toolbar.style.display = 'none';
-  const noPrintElems = doc.querySelectorAll('.no-print');
-  noPrintElems.forEach(el => el.style.display = 'none');
 
+  const element = document.getElementById('pdfContainer');
   html2pdf().set({
-    margin: [4, 4, 4, 4],
-    filename: `${po?.po_number || 'Purchase-Order'}_BlueSun.pdf`,
+    margin: [0, 0, 0, 0],
+    filename: `PO_${document.getElementById('poRef').textContent}_BlueSun.pdf`,
     image: { type: 'jpeg', quality: 0.98 },
     html2canvas: { scale: 2, useCORS: true },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  }).from(doc).save().finally(() => {
+  }).from(element).save().finally(() => {
     toolbar.style.display = 'flex';
-    noPrintElems.forEach(el => el.style.display = '');
   });
-};
-
-document.getElementById('print').onclick = () => {
-  panel.classList.remove('open');
-  window.print();
 };
 </script>
 </body>
